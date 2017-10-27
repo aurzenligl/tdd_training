@@ -4,5 +4,5 @@
 # Script should be used as '. init-tox-env'.
 
 projectdir=`dirname $0`
-tox --notest && source ${projectdir}/.tox/py35/bin/activate && cd ${projectdir}/tests
+tox --notest && source ${projectdir}/.tox/py36/bin/activate && cd ${projectdir}/tests
 
