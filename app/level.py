@@ -9,17 +9,19 @@ class SquareType():
 class Level():
     """Represents logical level state"""
 
-    def __init__(self, rows, columns, squaretypes):
+    def __init__(self, columns, rows, squaretypes):
         """
         :arg squaretypes: flat list of SquareType, consecutive
                           elements represent rows from left to right,
                           top to bottom.
         """
-        pass
+        self.cols = columns
+        self.rows = rows
+        self.squares = squaretypes
 
     def size(self):
         """Returns tuple with column and row counts"""
-        pass
+        return self.cols, self.rows
 
     def __call__(self, col, row):
         """Indexing operator"""
