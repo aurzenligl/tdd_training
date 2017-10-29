@@ -6,6 +6,20 @@ class SquareType():
     GOAL = 4
     SETBOX = 5
 
+class LevelIterator():
+    def __init__(self, level):
+        self.level = level
+        self.n = 0
+
+    def __next__(self):
+        n = self.n
+        if n >= len(self.level.squares):
+            raise StopIteration()
+        self.n += 1
+        row, col = divmod(n, self.level.size()[0])
+        pos = col, row
+        return (pos), self.level[pos]
+
 class Level():
     """Represents logical level state"""
 
@@ -42,4 +56,4 @@ class Level():
 
         Sequence consists of rows output left to right, top to bottom.
         """
-        pass
+        return LevelIterator(self)
