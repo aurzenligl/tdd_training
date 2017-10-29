@@ -29,6 +29,11 @@ class Level():
                           elements represent rows from left to right,
                           top to bottom.
         """
+        nexpect = columns * rows
+        nactual = len(squaretypes)
+        if nexpect != nactual:
+            raise ValueError("expected %s elements, got %s"
+                             % (nexpect, nactual))
         self.cols = columns
         self.rows = rows
         self.squares = squaretypes
@@ -42,6 +47,9 @@ class Level():
         :arg pos: col and row tuple
         """
         col, row = pos
+        if col >= self.cols or row >= self.rows:
+            raise ValueError("index (%s,%s) out of bounds (%s,%s)"
+                             % (col, row, self.cols, self.rows))
         return self.squares[row * self.cols + col]
 
     def __setitem__(self, pos, value):
@@ -49,6 +57,9 @@ class Level():
         :arg pos: col and row tuple
         """
         col, row = pos
+        if col >= self.cols or row >= self.rows:
+            raise ValueError("index (%s,%s) out of bounds (%s,%s)"
+                             % (col, row, self.cols, self.rows))
         self.squares[row * self.cols + col] = value
 
     def __iter__(self):
