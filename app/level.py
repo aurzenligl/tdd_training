@@ -23,9 +23,12 @@ class Level():
         """Returns tuple with column and row counts"""
         return self.cols, self.rows
 
-    def __call__(self, col, row):
-        """Indexing operator"""
-        pass
+    def __getitem__(self, pos):
+        """
+        :arg pos: col and row tuple
+        """
+        col, row = pos
+        return self.squares[row * self.cols + col]
 
     def __iter__(self):
         """Returns sequence of tuples of row-col tuples and SquareType.

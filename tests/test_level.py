@@ -11,6 +11,6 @@ def test_level_empty():
 def test_level_filled():
     level = Level(3, 2, [S, W, S, S, S, P])
     assert level.size() == (3, 2)
-    assert level(0, 0) == S
-    assert level(1, 0) == W
-    assert level(2, 1) == P
+    assert level[0,0] == S
+    assert level[1,0] == W
+    assert level[2,1] == P
