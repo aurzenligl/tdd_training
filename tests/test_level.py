@@ -1,3 +1,4 @@
+import pytest
 from app.level import SquareType, Level
 
 S = SquareType.SPACE
@@ -35,3 +36,16 @@ def test_level_iteration():
         ((1,1), P),
         ((2,1), W),
     ]
+
+def test_level_errors():
+    with pytest.raises(ValueError) as e:
+        Level(1, 1, [W])
+    assert str(e.value) == "expected 2 elements, got 1"
+
+    with pytest.raises(ValueError) as e:
+        Level(0, 1, [W])[1,0]
+    assert str(e.value) == "index (1,0) out of bounds (0,1)"
+
+    with pytest.raises(ValueError) as e:
+        Level(0, 1, [W])[1,0] = S
+    assert str(e.value) == "index (1,0) out of bounds (0,1)"
