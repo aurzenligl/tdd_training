@@ -30,6 +30,13 @@ class Level():
         col, row = pos
         return self.squares[row * self.cols + col]
 
+    def __setitem__(self, pos, value):
+        """
+        :arg pos: col and row tuple
+        """
+        col, row = pos
+        self.squares[row * self.cols + col] = value
+
     def __iter__(self):
         """Returns sequence of tuples of row-col tuples and SquareType.
 
