@@ -1,12 +1,14 @@
+import mock
 import pytest
 from app.level import Level, SquareType
 from app.game import Game
 
+S = SquareType.SPACE
+W = SquareType.WALL
+B = SquareType.BOX
+
 @pytest.fixture
 def level():
-    S = SquareType.SPACE
-    W = SquareType.WALL
-    B = SquareType.BOX
     squares = [
         W, W, W, W, W,
         W, S, B, S, W,
@@ -15,7 +17,26 @@ def level():
     ]
     return Level(5, 4, squares)
 
+def call_args(mock):
+    return [x[:] for x in mock.call_args_list]
+
 def test_game_size(level):
     game = Game(level)
 
     assert game.size() == (5, 4)
+
+def test_game_rendering(level):
+    game = Game(level)
+    drawer = mock.Mock()
+
+    game.on_render(drawer)
+
+    for n in range(5):
+        drawer.square.assert_called_with((n,0), W)
+        drawer.square.assert_called_with((n,3), W)
+    drawer.square.assert_called_with((1,1), S)
+    drawer.square.assert_called_with((3,1), S)
+    drawer.square.assert_called_with((1,2), S)
+    drawer.square.assert_called_with((2,2), S)
+    drawer.square.assert_called_with((1,2), S)
+    drawer.square.assert_called_with((2,1), B)
