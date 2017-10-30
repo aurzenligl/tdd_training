@@ -2,9 +2,8 @@ class SquareType():
     SPACE = 0
     WALL = 1
     BOX = 2
-    PLAYER = 3
-    GOAL = 4
-    SETBOX = 5
+    GOAL = 3
+    SETBOX = 4
 
 class LevelIterator():
     def __init__(self, level):

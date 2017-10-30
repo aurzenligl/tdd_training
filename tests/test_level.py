@@ -3,7 +3,7 @@ from app.level import SquareType, Level
 
 S = SquareType.SPACE
 W = SquareType.WALL
-P = SquareType.PLAYER
+B = SquareType.BOX
 
 def test_level_empty():
     level = Level(0, 0, [])
@@ -11,12 +11,12 @@ def test_level_empty():
     assert level.size() == (0, 0)
 
 def test_level_filled():
-    level = Level(3, 2, [S, W, S, S, S, P])
+    level = Level(3, 2, [S, W, S, S, S, B])
 
     assert level.size() == (3, 2)
     assert level[0,0] == S
     assert level[1,0] == W
-    assert level[2,1] == P
+    assert level[2,1] == B
 
 def test_level_indexing():
     level = Level(2, 2, [S, S, S, S])
@@ -26,14 +26,14 @@ def test_level_indexing():
     assert level[1,0] == W
 
 def test_level_iteration():
-    level = Level(3, 2, [S, W, P, S, P, W])
+    level = Level(3, 2, [S, W, B, S, B, W])
 
     assert [_ for _ in level] == [
         ((0,0), S),
         ((1,0), W),
-        ((2,0), P),
+        ((2,0), B),
         ((0,1), S),
-        ((1,1), P),
+        ((1,1), B),
         ((2,1), W),
     ]
 
