@@ -9,6 +9,8 @@ class Game():
         return self.level.size()
 
     def on_render(self, drawer):
+        for pos, type_ in self.level:
+            drawer.square(pos, type_)
         """Draws all game objects"""
         pass
 
