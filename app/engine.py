@@ -12,6 +12,11 @@ class Engine():
         cols, rows = self.game.size()
         pygame.display.set_mode(cols * 20, rows * 20)
 
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return
+
     def _render(self):
         """Renders new game frame"""
         pass
