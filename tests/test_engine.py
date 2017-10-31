@@ -1,3 +1,4 @@
+import mock
 import pytest
 import pygame
 from types import ModuleType
@@ -12,7 +13,7 @@ def mock_pygame(mocker):
         mocker.patch('pygame.' + var)
 
 @pytest.fixture
-def eventq():
+def events():
     class Event():
         def __init__(self, type_):
             self.type = type_
@@ -30,17 +31,33 @@ def eventq():
     return eq
 
 @pytest.fixture
+def screen():
+    scr = mock.Mock()
+    screens = [scr]
+    pygame.display.set_mode.side_effect = lambda _, __: screens.pop(0)
+    return scr
+
+@pytest.fixture
 def game():
     class GameFake():
         def size(self):
             return 5, 3
     return GameFake()
 
-def test_engine_init(game, eventq):
+def test_engine_init(game, events):
+    events.push(pygame.QUIT)
     eng = Engine(game)
-    eventq.push(pygame.QUIT)
 
     eng.run()
 
     pygame.init.assert_called_once()
     pygame.display.set_mode.assert_called_once_with(100, 60)
+
+def test_engine_renders(game, events, screen):
+    events.push(pygame.QUIT)
+    eng = Engine(game)
+
+    eng.run()
+
+    screen.fill.assert_called_once()
+    pygame.display.flip.assert_called_once()
