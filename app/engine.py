@@ -4,13 +4,13 @@ class Engine():
     """Manages game resources"""
 
     def __init__(self, game):
-        pygame.init()
-        cols, rows = game.size()
-        pygame.display.set_mode(cols * 20, rows * 20)
+        self.game = game
 
-    def run(self, game):
+    def run(self):
         """Initializes screen and runs game main loop."""
-        pass
+        pygame.init()
+        cols, rows = self.game.size()
+        pygame.display.set_mode(cols * 20, rows * 20)
 
     def _render(self):
         """Renders new game frame"""

@@ -20,5 +20,8 @@ def game():
 
 def test_engine_init(game):
     eng = Engine(game)
+
+    eng.run()
+
     pygame.init.assert_called_once()
     pygame.display.set_mode.assert_called_once_with(100, 60)
