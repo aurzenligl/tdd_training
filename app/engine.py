@@ -1,8 +1,10 @@
+import pygame
+
 class Engine():
     """Manages game resources"""
 
     def __init__(self, game):
-        pass
+        pygame.init()
 
     def run(self, game):
         """Initializes screen and runs game main loop."""
