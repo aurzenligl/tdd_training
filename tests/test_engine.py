@@ -1,4 +1,3 @@
-import mock
 import pytest
 import pygame
 from types import ModuleType
@@ -14,9 +13,11 @@ def mock_pygame(mocker):
 
 @pytest.fixture
 def game():
-    return mock.Mock()
+    class GameFake():
+        def size(self):
+            return 5, 3
 
 def test_engine_init(game):
     eng = Engine(game)
-
     pygame.init.assert_called_once()
+    pygame.display.set_mode.assert_called_once_with(100, 60)
