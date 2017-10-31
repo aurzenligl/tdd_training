@@ -16,6 +16,7 @@ def game():
     class GameFake():
         def size(self):
             return 5, 3
+    return GameFake()
 
 def test_engine_init(game):
     eng = Engine(game)
