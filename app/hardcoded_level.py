@@ -25,4 +25,4 @@ hardcoded_level = [
 ]
 
 def get_level():
-    return Level(20, 16, hardcoded_level)
+    return Level((20, 16), hardcoded_level, (9, 5))
