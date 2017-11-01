@@ -3,6 +3,7 @@ import pytest
 import pygame
 from types import ModuleType
 from app.engine import Engine
+from app.color import Color
 
 @pytest.fixture(autouse=True)
 def mock_pygame(mocker):
@@ -42,6 +43,10 @@ def game():
     class GameFake():
         def size(self):
             return 5, 3
+        def on_render(self, drawer):
+            drawer.square((0,0), Color.BLUE)
+            drawer.square((4,2), Color.RED)
+
     return GameFake()
 
 def test_engine_init(game, events):
@@ -59,5 +64,6 @@ def test_engine_renders(game, events, screen):
 
     eng.run()
 
+    assert screen.blit.call_count == 2
     screen.fill.assert_called_once()
     pygame.display.flip.assert_called_once()
