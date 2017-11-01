@@ -34,15 +34,23 @@ class Level():
                           top to bottom.
         :arg player: player's column and row tuple
         """
+        self.cols = columns
+        self.rows = rows
+        self.squares = squaretypes
+        self._player = player
+
         nexpect = columns * rows
         nactual = len(squaretypes)
         if nexpect != nactual:
             raise ValueError("expected %s elements, got %s"
                              % (nexpect, nactual))
-        self.cols = columns
-        self.rows = rows
-        self.squares = squaretypes
-        self._player = player
+
+        if player[0] > columns or player[1] > rows:
+            raise ValueError("player position %s out of bounds %s"
+                             % (player, (columns, rows)))
+
+        if self[player] != SquareType.SPACE:
+            raise ValueError("expected player on empty space")
 
     def size(self):
         """Returns tuple with column and row counts"""

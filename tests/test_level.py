@@ -6,7 +6,7 @@ W = SquareType.WALL
 B = SquareType.BOX
 
 def make_example_level():
-    return Level(3, 2, [S, W, B, S, B, W], (3, 0))
+    return Level(6, 1, [S, W, B, S, B, W], (3, 0))
 
 def test_level_filled():
     level = Level(3, 2, [S, W, S, S, S, B], (0,0))
@@ -58,7 +58,7 @@ def test_level_error_wrong_index_write():
 def test_level_error_nonexistent_player_position():
     with pytest.raises(ValueError) as e:
         Level(1, 1, [S], (3,4))
-    assert str(e.value) == "player position (3,4) out of bounds (1,1)"
+    assert str(e.value) == "player position (3, 4) out of bounds (1, 1)"
 
 def test_level_error_player_not_on_space():
     with pytest.raises(ValueError) as e:
