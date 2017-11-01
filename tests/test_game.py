@@ -15,7 +15,7 @@ def level():
         W, S, S, S, W,
         W, W, W, W, W,
     ]
-    return Level(5, 4, squares, player=(1,1))
+    return Level((5,4), squares, player=(1,1))
 
 def call_args(mock):
     return [x[:] for x in mock.call_args_list]

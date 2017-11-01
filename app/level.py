@@ -25,18 +25,15 @@ class LevelIterator():
 class Level():
     """Represents logical level state"""
 
-    def __init__(self, columns, rows, squaretypes, player):
+    def __init__(self, size, squaretypes, player):
         """
-        :arg columns: number of columns
-        :arg rows: number of rows
+        :arg size: tuple with number of columns and rows
         :arg squaretypes: flat list of SquareType, consecutive
                           elements represent rows from left to right,
                           top to bottom.
         :arg player: player's column and row tuple
         """
-        size = columns, rows
-
-        nexpect = columns * rows
+        nexpect = size[0] * size[1]
         if nexpect != len(squaretypes):
             raise ValueError("expected %s elements, got %s"
                              % (nexpect, len(squaretypes)))
