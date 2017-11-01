@@ -59,8 +59,11 @@ class Level():
         return self._player
 
     @player.setter
-    def player(self, value):
-        self._player = value
+    def player(self, pos):
+        tile = self[pos]
+        if tile not in (Tile.SPACE, Tile.GOAL):
+            raise ValueError("expected player on empty space or goal")
+        self._player = pos
 
     def __getitem__(self, pos):
         """
