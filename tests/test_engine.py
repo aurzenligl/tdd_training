@@ -65,5 +65,6 @@ def test_engine_renders(game, events, screen):
     eng.run()
 
     screen.fill.assert_called_once()
-    assert screen.blit.call_count == 2
+    screen.blit.assert_any_call(mock.ANY, (0,0))
+    screen.blit.assert_any_call(mock.ANY, (80,40))
     pygame.display.flip.assert_called_once()
