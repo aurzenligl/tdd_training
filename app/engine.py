@@ -1,6 +1,6 @@
 import pygame
 from .color import Color
-from .level import Tile
+from .level import Tile, Direction
 
 class Engine():
     """Manages game resources"""
@@ -19,6 +19,8 @@ class Engine():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return
+                if event.type == pygame.KEYDOWN:
+                    self._keypress(event.key)
 
     def _render(self):
         """Renders new game frame"""
@@ -44,4 +46,13 @@ class Engine():
 
     def _keypress(self, key):
         """Reacts on any key press"""
-        pass
+        directions = {
+            pygame.K_UP: Direction.UP,
+            pygame.K_DOWN: Direction.DOWN,
+            pygame.K_RIGHT: Direction.RIGHT,
+            pygame.K_LEFT: Direction.LEFT
+        }
+        direction = directions.get(key)
+        if direction is not None:
+            self.game.on_move(direction)
+            self._render()
