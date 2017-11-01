@@ -1,6 +1,7 @@
 import pygame
 from .color import Color
-from .level import Tile, Direction
+from .level import Tile
+from .game import Direction
 
 class Engine():
     """Manages game resources"""

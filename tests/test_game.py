@@ -1,7 +1,7 @@
 import mock
 import pytest
 from app.level import Level, Tile
-from app.game import Game
+from app.game import Game, Direction, MoveError
 
 S = Tile.SPACE
 W = Tile.WALL
@@ -40,3 +40,11 @@ def test_game_rendering(level):
     drawer.square.assert_any_call((2,2), S)
     drawer.square.assert_any_call((1,2), S)
     drawer.square.assert_any_call((2,1), B)
+
+def test_game_movement_illegal(level):
+    game = Game(level)
+
+    with pytest.raises(MoveError):
+        game.on_move(Direction.LEFT)
+
+    assert level.player == (1, 1)

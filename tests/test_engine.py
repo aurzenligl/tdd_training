@@ -3,7 +3,8 @@ import pytest
 import pygame
 from types import ModuleType
 from app.engine import Engine
-from app.level import Tile, Direction
+from app.level import Tile
+from app.game import Direction
 
 @pytest.fixture(autouse=True)
 def mock_pygame(mocker):

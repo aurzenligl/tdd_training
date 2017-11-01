@@ -5,12 +5,6 @@ class Tile():
     GOAL = 3
     SETBOX = 4
 
-class Direction():
-    UP = 0
-    DOWN = 1
-    RIGHT = 2
-    LEFT = 3
-
 class LevelIterator():
     def __init__(self, level):
         self.level = level

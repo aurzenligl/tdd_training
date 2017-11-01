@@ -1,3 +1,12 @@
+class Direction():
+    UP = 0
+    DOWN = 1
+    RIGHT = 2
+    LEFT = 3
+
+class MoveError(Exception):
+    pass
+
 class Game():
     """Game logic, knows how to move and what to render"""
 
