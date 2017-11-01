@@ -19,6 +19,9 @@ class LevelIterator():
         pos = col, row
         return (pos), self.level[pos]
 
+    def next(self):
+        return self.__next__()
+
 class Level():
     """Represents logical level state"""
 
