@@ -9,7 +9,7 @@ def mock_pygame(mocker):
     def mockable(val):
         return callable(val) or isinstance(val, ModuleType)
 
-    for var in [varname for (varname, varval) in vars(pygame).items() if mockable]:
+    for var in [varname for (varname, varval) in vars(pygame).items() if mockable(varval)]:
         mocker.patch('pygame.' + var)
 
 @pytest.fixture
