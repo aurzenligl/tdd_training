@@ -6,25 +6,27 @@ W = SquareType.WALL
 B = SquareType.BOX
 
 def make_example_level():
-    return Level(6, 1, [S, W, B, S, B, W], (3, 0))
+    tiles = [S, W, B,
+             S, B, W]
+    return Level(3, 2, tiles, (0, 1))
 
 def test_level_filled():
-    level = Level(3, 2, [S, W, S, S, S, B], (0,0))
+    level = make_example_level()
 
     assert level.size == (3, 2)
     assert level[0,0] == S
     assert level[1,0] == W
-    assert level[2,1] == B
+    assert level[1,1] == B
 
 def test_level_indexing():
-    level = Level(2, 2, [S, S, S, S], (0,0))
+    level = make_example_level()
 
-    level[1,0] = W
+    level[1,0] = B
 
-    assert level[1,0] == W
+    assert level[1,0] == B
 
 def test_level_iteration():
-    level = Level(3, 2, [S, W, B, S, B, W], (0,0))
+    level = make_example_level()
 
     assert [_ for _ in level] == [
         ((0,0), S),
@@ -38,7 +40,7 @@ def test_level_iteration():
 def test_level_player_position():
     level = make_example_level()
 
-    assert level.player == (3, 0)
+    assert level.player == (0, 1)
 
 def test_level_error_too_few_squaretypes():
     with pytest.raises(ValueError) as e:
