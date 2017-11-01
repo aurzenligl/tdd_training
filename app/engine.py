@@ -12,7 +12,7 @@ class Engine():
         """Initializes screen and runs game main loop."""
         pygame.init()
         cols, rows = self.game.size()
-        self.screen = pygame.display.set_mode(cols * 20, rows * 20)
+        self.screen = pygame.display.set_mode((cols * 20, rows * 20))
         self._render()
 
         while True:

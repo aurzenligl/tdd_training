@@ -35,7 +35,7 @@ def events():
 def screen():
     scr = mock.Mock()
     screens = [scr]
-    pygame.display.set_mode.side_effect = lambda _, __: screens.pop(0)
+    pygame.display.set_mode.side_effect = lambda _: screens.pop(0)
     return scr
 
 @pytest.fixture
@@ -56,7 +56,7 @@ def test_engine_init(game, events):
     eng.run()
 
     pygame.init.assert_called_once()
-    pygame.display.set_mode.assert_called_once_with(100, 60)
+    pygame.display.set_mode.assert_called_once_with((100, 60))
 
 def test_engine_renders(game, events, screen):
     events.push(pygame.QUIT)
