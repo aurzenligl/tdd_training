@@ -40,15 +40,27 @@ def test_level_player_position():
 
     assert level.player == (3, 0)
 
-def test_level_errors():
+def test_level_error_too_few_squaretypes():
     with pytest.raises(ValueError) as e:
-        Level(1, 1, [], (0,0))
-    assert str(e.value) == "expected 1 elements, got 0"
+        Level(2, 2, [S], (0,0))
+    assert str(e.value) == "expected 4 elements, got 1"
 
+def test_level_error_wrong_index_read():
     with pytest.raises(ValueError) as e:
-        Level(1, 1, [W], (0,0))[1,0]
+        Level(1, 1, [S], (0,0))[1,0]
     assert str(e.value) == "index (1,0) out of bounds (1,1)"
 
+def test_level_error_wrong_index_write():
     with pytest.raises(ValueError) as e:
-        Level(1, 1, [W], (0,0))[1,0] = S
+        Level(1, 1, [S], (0,0))[1,0] = S
     assert str(e.value) == "index (1,0) out of bounds (1,1)"
+
+def test_level_error_nonexistent_player_position():
+    with pytest.raises(ValueError) as e:
+        Level(1, 1, [S], (3,4))
+    assert str(e.value) == "player position (3,4) out of bounds (1,1)"
+
+def test_level_error_player_not_on_space():
+    with pytest.raises(ValueError) as e:
+        Level(1, 1, [W], (0,0))
+    assert str(e.value) == "expected player on empty space"
