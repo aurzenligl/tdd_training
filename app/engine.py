@@ -24,22 +24,6 @@ class Engine():
 
     def _render(self):
         """Renders new game frame"""
-        class Drawer():
-            type_to_col = {
-                Tile.SPACE: Color.LBLUE,
-                Tile.WALL: Color.RED,
-                Tile.BOX: Color.BROWN,
-                Tile.GOAL: Color.BLUE,
-                Tile.SETBOX: Color.GBLUE
-            }
-            def __init__(self, screen):
-                self.screen = screen
-            def square(self, pos, type_):
-                surf = pygame.Surface((20, 20))
-                surf.fill(self.type_to_col[type_])
-                col, row = pos
-                self.screen.blit(surf, (col * 20, row * 20))
-
         self.screen.fill(Color.BLACK)
         self.game.on_render(Drawer(self.screen))
         pygame.display.flip()
@@ -56,3 +40,19 @@ class Engine():
         if direction is not None:
             self.game.on_move(direction)
             self._render()
+
+class Drawer():
+    type_to_col = {
+        Tile.SPACE: Color.LBLUE,
+        Tile.WALL: Color.RED,
+        Tile.BOX: Color.BROWN,
+        Tile.GOAL: Color.BLUE,
+        Tile.SETBOX: Color.GBLUE
+    }
+    def __init__(self, screen):
+        self.screen = screen
+    def square(self, pos, type_):
+        surf = pygame.Surface((20, 20))
+        surf.fill(self.type_to_col[type_])
+        col, row = pos
+        self.screen.blit(surf, (col * 20, row * 20))
