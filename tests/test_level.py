@@ -45,7 +45,7 @@ def test_level_player_position():
 def test_level_player_position_setting():
     level = make_example_level()
 
-    level.player = 0, 0
+    level.player = (0, 0)
 
     assert level.player == (0, 0)
 

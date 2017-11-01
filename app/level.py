@@ -58,6 +58,10 @@ class Level():
     def player(self):
         return self._player
 
+    @player.setter
+    def player(self, value):
+        self._player = value
+
     def __getitem__(self, pos):
         """
         :arg pos: col and row tuple
