@@ -1,4 +1,4 @@
-class SquareType():
+class Tile():
     SPACE = 0
     WALL = 1
     BOX = 2
@@ -12,7 +12,7 @@ class LevelIterator():
 
     def __next__(self):
         n = self.n
-        if n >= len(self.level._squares):
+        if n >= len(self.level._tiles):
             raise StopIteration()
         self.n += 1
         row, col = divmod(n, self.level.size[0])
@@ -25,28 +25,28 @@ class LevelIterator():
 class Level():
     """Represents logical level state"""
 
-    def __init__(self, size, squaretypes, player):
+    def __init__(self, size, tiles, player):
         """
         :arg size: tuple with number of columns and rows
-        :arg squaretypes: flat list of SquareType, consecutive
-                          elements represent rows from left to right,
-                          top to bottom.
+        :arg tiles: flat list of Tile-s, consecutive
+                    elements represent rows from left to right,
+                    top to bottom.
         :arg player: player's column and row tuple
         """
         nexpect = size[0] * size[1]
-        if nexpect != len(squaretypes):
+        if nexpect != len(tiles):
             raise ValueError("expected %s elements, got %s"
-                             % (nexpect, len(squaretypes)))
+                             % (nexpect, len(tiles)))
 
         if _out_of_bounds(player, size):
             raise ValueError("player position %s out of bounds %s"
                              % (player, size))
 
-        if squaretypes[_index(player, size)] != SquareType.SPACE:
+        if tiles[_index(player, size)] != Tile.SPACE:
             raise ValueError("expected player on empty space")
 
         self._size = size
-        self._squares = squaretypes
+        self._tiles = tiles
         self._player = player
 
     @property
@@ -64,7 +64,7 @@ class Level():
         """
         if _out_of_bounds(pos, self.size):
             raise ValueError("index %s out of bounds %s" % (pos, self._size))
-        return self._squares[_index(pos, self.size)]
+        return self._tiles[_index(pos, self.size)]
 
     def __setitem__(self, pos, value):
         """
@@ -72,7 +72,7 @@ class Level():
         """
         if _out_of_bounds(pos, self.size):
             raise ValueError("index %s out of bounds %s" % (pos, self._size))
-        self._squares[_index(pos, self.size)] = value
+        self._tiles[_index(pos, self.size)] = value
 
     def __iter__(self):
         """Returns sequence of tuples of row-col tuples and SquareType.

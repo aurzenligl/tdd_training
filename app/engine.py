@@ -1,6 +1,6 @@
 import pygame
 from .color import Color
-from .level import SquareType
+from .level import Tile
 
 class Engine():
     """Manages game resources"""
@@ -24,11 +24,11 @@ class Engine():
         """Renders new game frame"""
         class Drawer():
             type_to_col = {
-                SquareType.SPACE: Color.LBLUE,
-                SquareType.WALL: Color.RED,
-                SquareType.BOX: Color.BROWN,
-                SquareType.GOAL: Color.BLUE,
-                SquareType.SETBOX: Color.GBLUE
+                Tile.SPACE: Color.LBLUE,
+                Tile.WALL: Color.RED,
+                Tile.BOX: Color.BROWN,
+                Tile.GOAL: Color.BLUE,
+                Tile.SETBOX: Color.GBLUE
             }
             def __init__(self, screen):
                 self.screen = screen

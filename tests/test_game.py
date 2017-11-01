@@ -1,11 +1,11 @@
 import mock
 import pytest
-from app.level import Level, SquareType
+from app.level import Level, Tile
 from app.game import Game
 
-S = SquareType.SPACE
-W = SquareType.WALL
-B = SquareType.BOX
+S = Tile.SPACE
+W = Tile.WALL
+B = Tile.BOX
 
 @pytest.fixture
 def level():

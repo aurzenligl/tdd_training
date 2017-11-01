@@ -1,9 +1,9 @@
 import pytest
-from app.level import SquareType, Level
+from app.level import Tile, Level
 
-S = SquareType.SPACE
-W = SquareType.WALL
-B = SquareType.BOX
+S = Tile.SPACE
+W = Tile.WALL
+B = Tile.BOX
 
 def make_example_level():
     tiles = [S, W, B,

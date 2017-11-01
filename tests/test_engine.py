@@ -3,7 +3,7 @@ import pytest
 import pygame
 from types import ModuleType
 from app.engine import Engine
-from app.level import SquareType
+from app.level import Tile
 
 @pytest.fixture(autouse=True)
 def mock_pygame(mocker):
@@ -44,8 +44,8 @@ def game():
         def size(self):
             return 5, 3
         def on_render(self, drawer):
-            drawer.square((0,0), SquareType.SPACE)
-            drawer.square((4,2), SquareType.WALL)
+            drawer.square((0,0), Tile.SPACE)
+            drawer.square((4,2), Tile.WALL)
 
     return GameFake()
 

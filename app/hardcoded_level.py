@@ -1,9 +1,9 @@
-from .level import Level, SquareType
+from .level import Level, Tile
 
-S = SquareType.SPACE
-W = SquareType.WALL
-B = SquareType.BOX
-G = SquareType.GOAL
+S = Tile.SPACE
+W = Tile.WALL
+B = Tile.BOX
+G = Tile.GOAL
 
 hardcoded_level = [
     S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S,
