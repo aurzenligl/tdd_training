@@ -11,7 +11,7 @@ def make_example_level():
 def test_level_filled():
     level = Level(3, 2, [S, W, S, S, S, B], (0,0))
 
-    assert level.size() == (3, 2)
+    assert level.size == (3, 2)
     assert level[0,0] == S
     assert level[1,0] == W
     assert level[2,1] == B
@@ -48,12 +48,12 @@ def test_level_error_too_few_squaretypes():
 def test_level_error_wrong_index_read():
     with pytest.raises(ValueError) as e:
         Level(1, 1, [S], (0,0))[1,0]
-    assert str(e.value) == "index (1,0) out of bounds (1,1)"
+    assert str(e.value) == "index (1, 0) out of bounds (1, 1)"
 
 def test_level_error_wrong_index_write():
     with pytest.raises(ValueError) as e:
         Level(1, 1, [S], (0,0))[1,0] = S
-    assert str(e.value) == "index (1,0) out of bounds (1,1)"
+    assert str(e.value) == "index (1, 0) out of bounds (1, 1)"
 
 def test_level_error_nonexistent_player_position():
     with pytest.raises(ValueError) as e:

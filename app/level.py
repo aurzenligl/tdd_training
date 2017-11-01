@@ -12,10 +12,10 @@ class LevelIterator():
 
     def __next__(self):
         n = self.n
-        if n >= len(self.level.squares):
+        if n >= len(self.level._squares):
             raise StopIteration()
         self.n += 1
-        row, col = divmod(n, self.level.size()[0])
+        row, col = divmod(n, self.level.size[0])
         pos = col, row
         return (pos), self.level[pos]
 
@@ -34,27 +34,28 @@ class Level():
                           top to bottom.
         :arg player: player's column and row tuple
         """
-        self.cols = columns
-        self.rows = rows
-        self.squares = squaretypes
-        self._player = player
+        size = columns, rows
 
         nexpect = columns * rows
-        nactual = len(squaretypes)
-        if nexpect != nactual:
+        if nexpect != len(squaretypes):
             raise ValueError("expected %s elements, got %s"
-                             % (nexpect, nactual))
+                             % (nexpect, len(squaretypes)))
 
-        if player[0] > columns or player[1] > rows:
+        if _out_of_bounds(player, size):
             raise ValueError("player position %s out of bounds %s"
-                             % (player, (columns, rows)))
+                             % (player, size))
 
-        if self[player] != SquareType.SPACE:
+        if squaretypes[_index(player, size)] != SquareType.SPACE:
             raise ValueError("expected player on empty space")
 
+        self._size = size
+        self._squares = squaretypes
+        self._player = player
+
+    @property
     def size(self):
         """Returns tuple with column and row counts"""
-        return self.cols, self.rows
+        return self._size
 
     @property
     def player(self):
@@ -64,21 +65,17 @@ class Level():
         """
         :arg pos: col and row tuple
         """
-        col, row = pos
-        if col >= self.cols or row >= self.rows:
-            raise ValueError("index (%s,%s) out of bounds (%s,%s)"
-                             % (col, row, self.cols, self.rows))
-        return self.squares[row * self.cols + col]
+        if _out_of_bounds(pos, self.size):
+            raise ValueError("index %s out of bounds %s" % (pos, self._size))
+        return self._squares[_index(pos, self.size)]
 
     def __setitem__(self, pos, value):
         """
         :arg pos: col and row tuple
         """
-        col, row = pos
-        if col >= self.cols or row >= self.rows:
-            raise ValueError("index (%s,%s) out of bounds (%s,%s)"
-                             % (col, row, self.cols, self.rows))
-        self.squares[row * self.cols + col] = value
+        if _out_of_bounds(pos, self.size):
+            raise ValueError("index %s out of bounds %s" % (pos, self._size))
+        self._squares[_index(pos, self.size)] = value
 
     def __iter__(self):
         """Returns sequence of tuples of row-col tuples and SquareType.
@@ -86,3 +83,9 @@ class Level():
         Sequence consists of rows output left to right, top to bottom.
         """
         return LevelIterator(self)
+
+def _out_of_bounds(pos, bounds):
+    return any(pos[i] >= bounds[i] for i in range(len(bounds)))
+
+def _index(pos, bounds):
+    return pos[1] * bounds[0] + pos[0]

@@ -6,7 +6,7 @@ class Game():
 
     def size(self):
         """Returns cols and rows tuple"""
-        return self.level.size()
+        return self.level.size
 
     def on_render(self, drawer):
         """Draws all game objects"""
