@@ -5,6 +5,9 @@ S = SquareType.SPACE
 W = SquareType.WALL
 B = SquareType.BOX
 
+def make_example_level():
+    level = Level(3, 2, [S, W, B, S, B, W], player=(3, 0))
+
 def test_level_empty():
     level = Level(0, 0, [])
 
@@ -36,6 +39,11 @@ def test_level_iteration():
         ((1,1), B),
         ((2,1), W),
     ]
+
+def test_level_player_position():
+    level = make_example_level()
+
+    assert level.player() == (3, 0)
 
 def test_level_errors():
     with pytest.raises(ValueError) as e:
