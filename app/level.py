@@ -25,11 +25,14 @@ class LevelIterator():
 class Level():
     """Represents logical level state"""
 
-    def __init__(self, columns, rows, squaretypes):
+    def __init__(self, columns, rows, squaretypes, player):
         """
+        :arg columns: number of columns
+        :arg rows: number of rows
         :arg squaretypes: flat list of SquareType, consecutive
                           elements represent rows from left to right,
                           top to bottom.
+        :arg player: player's column and row tuple
         """
         nexpect = columns * rows
         nactual = len(squaretypes)
@@ -39,10 +42,15 @@ class Level():
         self.cols = columns
         self.rows = rows
         self.squares = squaretypes
+        self._player = player
 
     def size(self):
         """Returns tuple with column and row counts"""
         return self.cols, self.rows
+
+    @property
+    def player(self):
+        return self._player
 
     def __getitem__(self, pos):
         """
