@@ -42,6 +42,13 @@ def test_level_player_position():
 
     assert level.player == (0, 1)
 
+def test_level_player_position_setting():
+    level = make_example_level()
+
+    level.player = 0, 0
+
+    assert level.player == (0, 0)
+
 def test_level_error_too_few_squaretypes():
     with pytest.raises(ValueError) as e:
         Level((2, 2), [S], (0,0))
