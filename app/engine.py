@@ -50,10 +50,16 @@ class Drawer():
         Tile.GOAL: Color.BLUE,
         Tile.SETBOX: Color.GBLUE
     }
+
     def __init__(self, screen):
         self.screen = screen
+
     def square(self, pos, type_):
         surf = pygame.Surface((20, 20))
         surf.fill(self.type_to_col[type_])
         col, row = pos
         self.screen.blit(surf, (col * 20, row * 20))
+
+    def circle(self, pos, color):
+        col, row = pos
+        pygame.draw.circle(self.screen, color, (col * 20 + 10, row * 20 + 10), 8)
