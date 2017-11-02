@@ -29,8 +29,8 @@ class Game():
 
     def on_render(self, drawer):
         """Draws all game objects"""
-        for pos, type_ in self.level:
-            drawer.square(pos, type_)
+        for pos, tile in self.level:
+            drawer.square(pos, tile.tile)
         drawer.circle(self.level.player, Color.YELLOW)
 
     def on_move(self, direction):
@@ -40,9 +40,9 @@ class Game():
 def _move(level, dir_):
     start = level.player
     end = _pos_add(start, _to_pos(dir_))
-    if level[end] == Tile.WALL:
+    if level[end].tile == Tile.WALL:
         return Move(Move.ILLEGAL, start, end)
-    elif level[end] in (Tile.SPACE, Tile.GOAL):
+    elif level[end].tile == Tile.SPACE:
         level.player = end
         return Move(Move.WALK, start, end)
 

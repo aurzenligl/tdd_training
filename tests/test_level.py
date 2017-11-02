@@ -4,8 +4,6 @@ from app.level import Tile, Level
 S = Tile.SPACE
 W = Tile.WALL
 B = Tile.BOX
-G = Tile.GOAL
-
 
 def make_example_level():
     return Level((3, 2), ' %o'
@@ -15,27 +13,30 @@ def test_level_filled():
     level = make_example_level()
 
     assert level.size == (3, 2)
-    assert level[0,0] == S
-    assert level[1,0] == W
-    assert level[1,1] == B
+    assert level[0,0].tile == S
+    assert level[0,0].goal is False
+    assert level[1,0].tile == W
+    assert level[1,0].goal is False
+    assert level[2,1].tile == S
+    assert level[2,1].goal is True
 
 def test_level_indexing():
     level = make_example_level()
 
-    level[1,0] = B
+    level[1,0].tile = B
 
-    assert level[1,0] == B
+    assert level[1,0].tile == B
 
 def test_level_iteration():
     level = make_example_level()
 
     assert [_ for _ in level] == [
-        ((0,0), S),
-        ((1,0), W),
-        ((2,0), B),
-        ((0,1), S),
-        ((1,1), B),
-        ((2,1), G),
+        ((0,0), level[0,0]),
+        ((1,0), level[1,0]),
+        ((2,0), level[2,0]),
+        ((0,1), level[0,1]),
+        ((1,1), level[1,1]),
+        ((2,1), level[2,1]),
     ]
 
 def test_level_player_position():
@@ -62,11 +63,6 @@ def test_level_error_wrong_index_read():
         Level((1, 1), '@')[1,0]
     assert str(e.value) == "index (1, 0) out of bounds (1, 1)"
 
-def test_level_error_wrong_index_write():
-    with pytest.raises(ValueError) as e:
-        Level((1, 1), '@')[1,0] = S
-    assert str(e.value) == "index (1, 0) out of bounds (1, 1)"
-
 def test_level_error_no_player():
     with pytest.raises(ValueError) as e:
         Level((3, 3), '.........')
@@ -81,7 +77,7 @@ def test_level_error_setting_player_not_on_space():
     with pytest.raises(ValueError) as e:
         level = Level((2, 1), '@%')
         level.player = (1, 0)
-    assert str(e.value) == "expected player on empty space or goal"
+    assert str(e.value) == "expected player on floor"
 
 def test_level_error_invalid_tilecode():
     with pytest.raises(ValueError) as e:

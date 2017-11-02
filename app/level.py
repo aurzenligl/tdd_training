@@ -2,8 +2,10 @@ class Tile():
     SPACE = 0
     WALL = 1
     BOX = 2
-    GOAL = 3
-    SETBOX = 4
+
+    def __init__(self, tile, goal=False):
+        self.tile = tile
+        self.goal = goal
 
 class LevelIterator():
     def __init__(self, level):
@@ -51,16 +53,17 @@ class Level(object):
         def to_tile(index, code):
             code2tile = {
                 ' ': Tile.SPACE,
+                '.': Tile.SPACE,
+                '@': Tile.SPACE,
                 '%': Tile.WALL,
                 'o': Tile.BOX,
-                '@': Tile.SPACE,
-                '.': Tile.GOAL,
             }
             tile = code2tile.get(code)
             if tile is None:
                 pos = tuple(reversed(divmod(index, size[0])))
                 raise ValueError("invalid tilecode '%s' on %s" % (code, pos))
-            return tile
+            goal = code == '.'
+            return Tile(tile, goal)
 
         self._size = size
         self._tiles = [to_tile(index, code) for index, code in enumerate(tilecodes)]
@@ -77,9 +80,9 @@ class Level(object):
 
     @player.setter
     def player(self, pos):
-        tile = self[pos]
-        if tile not in (Tile.SPACE, Tile.GOAL):
-            raise ValueError("expected player on empty space or goal")
+        tile = self[pos].tile
+        if tile != Tile.SPACE:
+            raise ValueError("expected player on floor")
         self._player = pos
 
     def __getitem__(self, pos):
@@ -89,14 +92,6 @@ class Level(object):
         if _out_of_bounds(pos, self.size):
             raise ValueError("index %s out of bounds %s" % (pos, self._size))
         return self._tiles[_index(pos, self.size)]
-
-    def __setitem__(self, pos, value):
-        """
-        :arg pos: col and row tuple
-        """
-        if _out_of_bounds(pos, self.size):
-            raise ValueError("index %s out of bounds %s" % (pos, self._size))
-        self._tiles[_index(pos, self.size)] = value
 
     def __iter__(self):
         """Returns sequence of tuples of row-col tuples and SquareType.

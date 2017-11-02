@@ -47,8 +47,6 @@ class Drawer():
         Tile.SPACE: Color.LBLUE,
         Tile.WALL: Color.RED,
         Tile.BOX: Color.BROWN,
-        Tile.GOAL: Color.BLUE,
-        Tile.SETBOX: Color.GBLUE
     }
 
     def __init__(self, screen):

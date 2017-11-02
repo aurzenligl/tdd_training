@@ -7,7 +7,6 @@ from app.color import Color
 S = Tile.SPACE
 W = Tile.WALL
 B = Tile.BOX
-G = Tile.GOAL
 Y = Color.YELLOW
 
 @pytest.fixture
