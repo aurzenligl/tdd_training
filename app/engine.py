@@ -52,3 +52,23 @@ class Drawer():
     def circle(self, pos, color):
         col, row = pos
         pygame.draw.circle(self.screen, color, (col * 20 + 10, row * 20 + 10), 8)
+
+    def diamond(self, pos, color):
+        # TODO: prepare a tuple-derived type with + and * operators
+        def mul2(tpl, scale):
+            return tpl[0]*scale, tpl[1]*scale
+
+        def mul3(tpl, scale):
+            return tpl[0]*scale, tpl[1]*scale, tpl[2]*scale
+
+        def add(tpl1, tpl2):
+            return tpl1[0]+tpl2[0], tpl1[1]+tpl2[1]
+
+        center = add(mul2(pos, 20), (10, 10))
+
+        pygame.draw.aalines(self.screen, mul3(color, 0.5), True, [
+            add(center, (9, 0)),
+            add(center, (0, 9)),
+            add(center, (-9, 0)),
+            add(center, (0, -9)),
+        ])

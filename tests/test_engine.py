@@ -56,6 +56,7 @@ def game():
             drawer.square((0,0), Color.RED)
             drawer.square((4,2), Color.RED)
             drawer.circle((1,1), Color.YELLOW)
+            drawer.diamond((2,2), Color.BLUE)
 
     return GameFake()
 
@@ -77,7 +78,8 @@ def test_engine_renders(game, events, screen):
     screen.fill.assert_called_once()
     pygame.draw.rect.assert_any_call(screen, mock.ANY, (0, 0, 20, 20))
     pygame.draw.rect.assert_any_call(screen, mock.ANY, (80, 40, 20, 20))
-    pygame.draw.circle.assert_any_call(screen, mock.ANY, (30, 30), mock.ANY)
+    pygame.draw.circle.assert_any_call(screen, mock.ANY, mock.ANY, mock.ANY)
+    pygame.draw.aalines.assert_any_call(screen, mock.ANY, mock.ANY, mock.ANY)
     pygame.display.flip.assert_called_once()
 
 def test_engine_relays_move_keypresses(game, events):

@@ -7,7 +7,7 @@ from app.game import Game, Direction, Move
 def level():
     return Level((5,4), '%%%%%'
                         '%@o %'
-                        '%   %'
+                        '% ..%'
                         '%%%%%')
 
 def call_args(mock):
@@ -28,6 +28,8 @@ def test_game_rendering(level):
         for m in range(4):
             drawer.square.assert_any_call((n,m), mock.ANY)
     drawer.circle.assert_any_call((1,1), mock.ANY)
+    drawer.diamond.assert_any_call((2,2), mock.ANY)
+    drawer.diamond.assert_any_call((3,2), mock.ANY)
 
 @pytest.mark.parametrize("movement, endpos", [
     (Direction.UP, (1, 0)),

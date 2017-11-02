@@ -36,7 +36,10 @@ class Game():
         }
 
         for pos, tile in self.level:
-            drawer.square(pos, tile_to_color[tile.tile])
+            color_ = tile_to_color[tile.tile]
+            drawer.square(pos, color_)
+            if tile.goal:
+                drawer.diamond(pos, color_)
         drawer.circle(self.level.player, Color.YELLOW)
 
     def on_move(self, direction):
