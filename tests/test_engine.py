@@ -5,6 +5,7 @@ from types import ModuleType
 from app.engine import Engine
 from app.level import Tile
 from app.game import Direction
+from app.color import Color
 
 @pytest.fixture(autouse=True)
 def mock_pygame(mocker):
@@ -52,6 +53,7 @@ def game():
         def on_render(self, drawer):
             drawer.square((0,0), Tile.SPACE)
             drawer.square((4,2), Tile.WALL)
+            drawer.circle((1,1), Color.YELLOW)
 
     return GameFake()
 
@@ -73,6 +75,8 @@ def test_engine_renders(game, events, screen):
     screen.fill.assert_called_once()
     screen.blit.assert_any_call(mock.ANY, (0,0))
     screen.blit.assert_any_call(mock.ANY, (80,40))
+    pygame.draw.circle.assert_any_call(screen, mock.ANY, (30, 30), mock.ANY)
+
     pygame.display.flip.assert_called_once()
 
 def test_engine_relays_move_keypresses(game, events):
