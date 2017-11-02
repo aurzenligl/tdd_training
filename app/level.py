@@ -22,7 +22,7 @@ class LevelIterator():
     def next(self):
         return self.__next__()
 
-class Level():
+class Level(object):
     """Represents logical level state"""
 
     def __init__(self, size, tiles, player):

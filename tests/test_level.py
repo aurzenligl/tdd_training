@@ -79,5 +79,6 @@ def test_level_error_player_not_on_space():
 
 def test_level_error_setting_player_not_on_space():
     with pytest.raises(ValueError) as e:
-        Level((2, 1), [S, W], (0, 0)).player = (1, 0)
+        level = Level((2, 1), [S, W], (0, 0))
+        level.player = (1, 0)
     assert str(e.value) == "expected player on empty space or goal"
