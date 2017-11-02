@@ -8,10 +8,12 @@ from app.game import Direction
 
 @pytest.fixture(autouse=True)
 def mock_pygame(mocker):
-    def mockable(val):
+    def mockable(name, val):
+        if getattr(val, '_NOT_IMPLEMENTED_', None):  # to silence pygame.MissingModule access warning
+            return False
         return callable(val) or isinstance(val, ModuleType)
 
-    for var in [varname for (varname, varval) in vars(pygame).items() if mockable(varval)]:
+    for var in [varname for (varname, varval) in vars(pygame).items() if mockable(varname, varval)]:
         mocker.patch('pygame.' + var)
 
 @pytest.fixture
