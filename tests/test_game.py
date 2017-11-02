@@ -1,7 +1,7 @@
 import mock
 import pytest
 from app.level import Level, Tile
-from app.game import Game, Direction, MoveError
+from app.game import Game, Direction, Move
 from app.color import Color
 
 S = Tile.SPACE
@@ -44,13 +44,13 @@ def test_game_rendering(level):
     drawer.square.assert_any_call((2,1), B)
     drawer.circle.assert_any_call((1,1), Y)
 
-@pytest.mark.parametrize("movement", [
-    Direction.UP,
-    Direction.DOWN,
-    Direction.LEFT,
-    Direction.RIGHT
+@pytest.mark.parametrize("movement, endpos", [
+    (Direction.UP, (1, 0)),
+    (Direction.DOWN, (1, 2)),
+    (Direction.LEFT, (0, 1)),
+    (Direction.RIGHT, (2, 1))
 ])
-def test_game_movement_illegal(level, movement):
+def test_game_movement_illegal(level, movement, endpos):
     level = Level((3,3), player=(1,1), tiles=[
         W, W, W,
         W, S, W,
@@ -58,7 +58,9 @@ def test_game_movement_illegal(level, movement):
     ])
     game = Game(level)
 
-    with pytest.raises(MoveError):
-        game.on_move(movement)
+    move = game.on_move(movement)
 
+    assert move.type == Move.ILLEGAL
+    assert move.start == (1, 1)
+    assert move.end == endpos
     assert level.player == (1, 1)
