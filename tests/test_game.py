@@ -7,6 +7,7 @@ from app.color import Color
 S = Tile.SPACE
 W = Tile.WALL
 B = Tile.BOX
+G = Tile.GOAL
 Y = Color.YELLOW
 
 @pytest.fixture
@@ -64,3 +65,24 @@ def test_game_movement_illegal(level, movement, endpos):
     assert move.start == (1, 1)
     assert move.end == endpos
     assert level.player == (1, 1)
+
+@pytest.mark.parametrize("movement, endpos", [
+    (Direction.UP, (1, 0)),
+    (Direction.DOWN, (1, 2)),
+    (Direction.LEFT, (0, 1)),
+    (Direction.RIGHT, (2, 1))
+])
+def test_game_movement_walk(level, movement, endpos):
+    level = Level((3,3), player=(1,1), tiles=[
+        W, S, W,
+        G, S, G,
+        W, S, W,
+    ])
+    game = Game(level)
+
+    move = game.on_move(movement)
+
+    assert move.type == Move.WALK
+    assert move.start == (1, 1)
+    assert move.end == endpos
+    assert level.player == endpos
