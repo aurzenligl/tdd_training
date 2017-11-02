@@ -67,6 +67,16 @@ def test_level_error_wrong_index_write():
         Level((1, 1), '@')[1,0] = S
     assert str(e.value) == "index (1, 0) out of bounds (1, 1)"
 
+def test_level_error_no_player():
+    with pytest.raises(ValueError) as e:
+        Level((3, 3), '.........')
+    assert str(e.value) == "no player: '@' specified"
+
+def test_level_error_two_players():
+    with pytest.raises(ValueError) as e:
+        Level((3, 3), '....@...@')
+    assert str(e.value) == "multiple players: '@' specified"
+
 def test_level_error_setting_player_not_on_space():
     with pytest.raises(ValueError) as e:
         level = Level((2, 1), '@%')

@@ -42,6 +42,12 @@ class Level(object):
             raise ValueError("expected %s elements, got %s"
                              % (nexpect, len(tilecodes)))
 
+        nplayers = tilecodes.count('@')
+        if nplayers == 0:
+            raise ValueError("no player: '@' specified")
+        if nplayers > 1:
+            raise ValueError("multiple players: '@' specified")
+
         def to_tile(index, code):
             code2tile = {
                 ' ': Tile.SPACE,
@@ -55,9 +61,6 @@ class Level(object):
                 pos = tuple(reversed(divmod(index, size[0])))
                 raise ValueError("invalid tilecode '%s' on %s" % (code, pos))
             return tile
-
-        # check if exactly one player is there
-        # tilecodes.count('@')
 
         self._size = size
         self._tiles = [to_tile(index, code) for index, code in enumerate(tilecodes)]
