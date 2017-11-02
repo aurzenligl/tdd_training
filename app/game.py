@@ -42,6 +42,9 @@ def _move(level, dir_):
     end = _pos_add(start, _to_pos(dir_))
     if level[end] == Tile.WALL:
         return Move(Move.ILLEGAL, start, end)
+    elif level[end] in (Tile.SPACE, Tile.GOAL):
+        level.player = end
+        return Move(Move.WALK, start, end)
 
 def _pos_add(lhs, rhs):
     return (lhs[0] + rhs[0], lhs[1] + rhs[1])
