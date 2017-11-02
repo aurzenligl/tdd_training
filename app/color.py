@@ -5,3 +5,4 @@ class Color():
     BLUE = (0, 0, 255)
     LBLUE = (135, 206, 250)
     GBLUE = (47, 79, 79)
+    YELLOW = (240, 230, 140)
