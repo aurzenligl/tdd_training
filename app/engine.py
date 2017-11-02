@@ -1,6 +1,5 @@
 import pygame
 from .color import Color
-from .level import Tile
 from .game import Direction
 
 class Engine():
@@ -43,20 +42,12 @@ class Engine():
             self._render()
 
 class Drawer():
-    type_to_col = {
-        Tile.SPACE: Color.LBLUE,
-        Tile.WALL: Color.RED,
-        Tile.BOX: Color.BROWN,
-    }
-
     def __init__(self, screen):
         self.screen = screen
 
-    def square(self, pos, type_):
-        surf = pygame.Surface((20, 20))
-        surf.fill(self.type_to_col[type_])
+    def square(self, pos, color):
         col, row = pos
-        self.screen.blit(surf, (col * 20, row * 20))
+        pygame.draw.rect(self.screen, color, (col * 20, row * 20, 20, 20))
 
     def circle(self, pos, color):
         col, row = pos

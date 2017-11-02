@@ -1,9 +1,9 @@
 import mock
+import inspect
 import pytest
 import pygame
 from types import ModuleType
 from app.engine import Engine
-from app.level import Tile
 from app.game import Direction
 from app.color import Color
 
@@ -12,10 +12,12 @@ def mock_pygame(mocker):
     def mockable(name, val):
         if getattr(val, '_NOT_IMPLEMENTED_', None):  # to silence pygame.MissingModule access warning
             return False
+        if name.startswith('_'):
+            return False
         return callable(val) or isinstance(val, ModuleType)
 
-    for var in [varname for (varname, varval) in vars(pygame).items() if mockable(varname, varval)]:
-        mocker.patch('pygame.' + var)
+    for name in [name for (name, val) in vars(pygame).items() if mockable(name, val)]:
+        mocker.patch('pygame.' + name)
 
 @pytest.fixture
 def events():
@@ -51,8 +53,8 @@ def game():
         def size(self):
             return 5, 3
         def on_render(self, drawer):
-            drawer.square((0,0), Tile.SPACE)
-            drawer.square((4,2), Tile.WALL)
+            drawer.square((0,0), Color.RED)
+            drawer.square((4,2), Color.RED)
             drawer.circle((1,1), Color.YELLOW)
 
     return GameFake()
@@ -73,10 +75,9 @@ def test_engine_renders(game, events, screen):
     eng.run()
 
     screen.fill.assert_called_once()
-    screen.blit.assert_any_call(mock.ANY, (0,0))
-    screen.blit.assert_any_call(mock.ANY, (80,40))
+    pygame.draw.rect.assert_any_call(screen, mock.ANY, (0, 0, 20, 20))
+    pygame.draw.rect.assert_any_call(screen, mock.ANY, (80, 40, 20, 20))
     pygame.draw.circle.assert_any_call(screen, mock.ANY, (30, 30), mock.ANY)
-
     pygame.display.flip.assert_called_once()
 
 def test_engine_relays_move_keypresses(game, events):

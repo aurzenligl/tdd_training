@@ -29,8 +29,14 @@ class Game():
 
     def on_render(self, drawer):
         """Draws all game objects"""
+        tile_to_color = {
+            Tile.SPACE: Color.LBLUE,
+            Tile.WALL: Color.RED,
+            Tile.BOX: Color.BROWN,
+        }
+
         for pos, tile in self.level:
-            drawer.square(pos, tile.tile)
+            drawer.square(pos, tile_to_color[tile.tile])
         drawer.circle(self.level.player, Color.YELLOW)
 
     def on_move(self, direction):

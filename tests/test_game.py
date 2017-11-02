@@ -1,13 +1,7 @@
 import mock
 import pytest
-from app.level import Level, Tile
+from app.level import Level
 from app.game import Game, Direction, Move
-from app.color import Color
-
-S = Tile.SPACE
-W = Tile.WALL
-B = Tile.BOX
-Y = Color.YELLOW
 
 @pytest.fixture
 def level():
@@ -31,15 +25,9 @@ def test_game_rendering(level):
     game.on_render(drawer)
 
     for n in range(5):
-        drawer.square.assert_any_call((n,0), W)
-        drawer.square.assert_any_call((n,3), W)
-    drawer.square.assert_any_call((1,1), S)
-    drawer.square.assert_any_call((3,1), S)
-    drawer.square.assert_any_call((1,2), S)
-    drawer.square.assert_any_call((2,2), S)
-    drawer.square.assert_any_call((1,2), S)
-    drawer.square.assert_any_call((2,1), B)
-    drawer.circle.assert_any_call((1,1), Y)
+        for m in range(4):
+            drawer.square.assert_any_call((n,m), mock.ANY)
+    drawer.circle.assert_any_call((1,1), mock.ANY)
 
 @pytest.mark.parametrize("movement, endpos", [
     (Direction.UP, (1, 0)),
