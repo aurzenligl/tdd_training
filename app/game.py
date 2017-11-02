@@ -1,4 +1,5 @@
 from .level import Tile
+from .color import Color
 
 class Direction():
     UP = 0
@@ -23,6 +24,7 @@ class Game():
         """Draws all game objects"""
         for pos, type_ in self.level:
             drawer.square(pos, type_)
+        drawer.circle(self.level.player, Color.YELLOW)
 
     def on_move(self, direction):
         """Reacts to movement"""
