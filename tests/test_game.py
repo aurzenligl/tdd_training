@@ -12,13 +12,10 @@ Y = Color.YELLOW
 
 @pytest.fixture
 def level():
-    squares = [
-        W, W, W, W, W,
-        W, S, B, S, W,
-        W, S, S, S, W,
-        W, W, W, W, W,
-    ]
-    return Level((5,4), squares, player=(1,1))
+    return Level((5,4), '%%%%%'
+                        '%@o %'
+                        '%   %'
+                        '%%%%%')
 
 def call_args(mock):
     return [x[:] for x in mock.call_args_list]
@@ -52,11 +49,9 @@ def test_game_rendering(level):
     (Direction.RIGHT, (2, 1))
 ])
 def test_game_movement_illegal(level, movement, endpos):
-    level = Level((3,3), player=(1,1), tiles=[
-        W, W, W,
-        W, S, W,
-        W, W, W,
-    ])
+    level = Level((3,3), '%%%'
+                         '%@%'
+                         '%%%')
     game = Game(level)
 
     move = game.on_move(movement)
@@ -73,11 +68,9 @@ def test_game_movement_illegal(level, movement, endpos):
     (Direction.RIGHT, (2, 1))
 ])
 def test_game_movement_walk(level, movement, endpos):
-    level = Level((3,3), player=(1,1), tiles=[
-        W, S, W,
-        G, S, G,
-        W, S, W,
-    ])
+    level = Level((3,3), '% %'
+                         '.@.'
+                         '% %')
     game = Game(level)
 
     move = game.on_move(movement)

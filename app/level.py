@@ -25,29 +25,38 @@ class LevelIterator():
 class Level(object):
     """Represents logical level state"""
 
-    def __init__(self, size, tiles, player):
+    def __init__(self, size, tilecodes):
         """
         :arg size: tuple with number of columns and rows
-        :arg tiles: flat list of Tile-s, consecutive
-                    elements represent rows from left to right,
-                    top to bottom.
-        :arg player: player's column and row tuple
+        :arg tilecodes: string with flat list of tile codes, consecutive
+                        elements represent rows from left to right,
+                        top to bottom. Chars have following meanings:
+                        ' ' - floor
+                        '%' - wall
+                        'o' - box
+                        '@' - player
+                        '.' - goal
         """
         nexpect = size[0] * size[1]
-        if nexpect != len(tiles):
+        if nexpect != len(tilecodes):
             raise ValueError("expected %s elements, got %s"
-                             % (nexpect, len(tiles)))
+                             % (nexpect, len(tilecodes)))
 
-        if _out_of_bounds(player, size):
-            raise ValueError("player position %s out of bounds %s"
-                             % (player, size))
+        code_to_tile = {
+            ' ': Tile.SPACE,
+            '%': Tile.WALL,
+            'o': Tile.BOX,
+            '@': Tile.SPACE,
+            '.': Tile.GOAL,
+        }
+        # check for illegal characters
 
-        if tiles[_index(player, size)] != Tile.SPACE:
-            raise ValueError("expected player on empty space")
+        # check if exactly one player is there
+        # tilecodes.count('@')
 
         self._size = size
-        self._tiles = tiles
-        self._player = player
+        self._tiles = [code_to_tile[code] for code in tilecodes]
+        self._player = tuple(reversed(divmod(tilecodes.find('@'), size[0])))
 
     @property
     def size(self):

@@ -6,10 +6,10 @@ W = Tile.WALL
 B = Tile.BOX
 G = Tile.GOAL
 
+
 def make_example_level():
-    tiles = [S, W, B,
-             S, B, G]
-    return Level((3, 2), tiles, (0, 1))
+    return Level((3, 2), ' %o'
+                         '@o.')
 
 def test_level_filled():
     level = make_example_level()
@@ -54,31 +54,21 @@ def test_level_player_position_setting():
 
 def test_level_error_too_few_squaretypes():
     with pytest.raises(ValueError) as e:
-        Level((2, 2), [S], (0,0))
+        Level((2, 2), '@')
     assert str(e.value) == "expected 4 elements, got 1"
 
 def test_level_error_wrong_index_read():
     with pytest.raises(ValueError) as e:
-        Level((1, 1), [S], (0,0))[1,0]
+        Level((1, 1), '@')[1,0]
     assert str(e.value) == "index (1, 0) out of bounds (1, 1)"
 
 def test_level_error_wrong_index_write():
     with pytest.raises(ValueError) as e:
-        Level((1, 1), [S], (0,0))[1,0] = S
+        Level((1, 1), '@')[1,0] = S
     assert str(e.value) == "index (1, 0) out of bounds (1, 1)"
-
-def test_level_error_nonexistent_player_position():
-    with pytest.raises(ValueError) as e:
-        Level((1, 1), [S], (3,4))
-    assert str(e.value) == "player position (3, 4) out of bounds (1, 1)"
-
-def test_level_error_player_not_on_space():
-    with pytest.raises(ValueError) as e:
-        Level((1, 1), [W], (0,0))
-    assert str(e.value) == "expected player on empty space"
 
 def test_level_error_setting_player_not_on_space():
     with pytest.raises(ValueError) as e:
-        level = Level((2, 1), [S, W], (0, 0))
+        level = Level((2, 1), '@%')
         level.player = (1, 0)
     assert str(e.value) == "expected player on empty space or goal"
