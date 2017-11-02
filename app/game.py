@@ -29,9 +29,17 @@ class Game():
         _move(self.level, direction)
 
 def _move(level, dir_):
-    if dir_ == Direction.LEFT:
-        if level[_pos_add(level.player, (-1, 0))] == Tile.WALL:
-            raise MoveError("moving into a wall")
+    if level[_pos_add(level.player, _to_pos(dir_))] == Tile.WALL:
+        raise MoveError("moving into a wall")
 
 def _pos_add(lhs, rhs):
     return (lhs[0] + rhs[0], lhs[1] + rhs[1])
+
+def _to_pos(dir_):
+    dirtopos = {
+        Direction.LEFT: (-1, 0),
+        Direction.RIGHT: (1, 0),
+        Direction.UP: (0, -1),
+        Direction.DOWN: (0, 1),
+    }
+    return dirtopos[dir_]
