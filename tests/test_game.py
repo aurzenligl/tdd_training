@@ -1,6 +1,6 @@
 import mock
 import pytest
-from app.level import Level
+from app.level import Level, Tile
 from app.game import Game, Direction, Move
 
 @pytest.fixture
@@ -68,3 +68,26 @@ def test_game_movement_walk(level, movement, endpos):
     assert move.start == (1, 1)
     assert move.end == endpos
     assert level.player == endpos
+
+@pytest.mark.parametrize("movement, endpos, endboxpos", [
+    (Direction.UP, (2, 1), (2, 0)),
+    (Direction.DOWN, (2, 3), (2, 4)),
+    (Direction.LEFT, (1, 2), (0, 2)),
+    (Direction.RIGHT, (3, 2), (4, 2))
+])
+def test_game_movement_push(level, movement, endpos, endboxpos):
+    level = Level((5,5), '%%.%%'
+                         '%%o%%'
+                         ' o@o '
+                         '%%o%%'
+                         '%%.%%')
+    game = Game(level)
+
+    move = game.on_move(movement)
+
+    assert move.type == Move.PUSH
+    assert move.start == (2, 2)
+    assert move.end == endpos
+    assert level.player == endpos
+    assert level[endpos].tile == Tile.FLOOR
+    assert level[endboxpos].tile == Tile.BOX
