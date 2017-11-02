@@ -42,20 +42,25 @@ class Level(object):
             raise ValueError("expected %s elements, got %s"
                              % (nexpect, len(tilecodes)))
 
-        code_to_tile = {
-            ' ': Tile.SPACE,
-            '%': Tile.WALL,
-            'o': Tile.BOX,
-            '@': Tile.SPACE,
-            '.': Tile.GOAL,
-        }
-        # check for illegal characters
+        def to_tile(index, code):
+            code2tile = {
+                ' ': Tile.SPACE,
+                '%': Tile.WALL,
+                'o': Tile.BOX,
+                '@': Tile.SPACE,
+                '.': Tile.GOAL,
+            }
+            tile = code2tile.get(code)
+            if tile is None:
+                pos = tuple(reversed(divmod(index, size[0])))
+                raise ValueError("invalid tilecode '%s' on %s" % (code, pos))
+            return tile
 
         # check if exactly one player is there
         # tilecodes.count('@')
 
         self._size = size
-        self._tiles = [code_to_tile[code] for code in tilecodes]
+        self._tiles = [to_tile(index, code) for index, code in enumerate(tilecodes)]
         self._player = tuple(reversed(divmod(tilecodes.find('@'), size[0])))
 
     @property

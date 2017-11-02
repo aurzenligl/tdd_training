@@ -72,3 +72,8 @@ def test_level_error_setting_player_not_on_space():
         level = Level((2, 1), '@%')
         level.player = (1, 0)
     assert str(e.value) == "expected player on empty space or goal"
+
+def test_level_error_invalid_tilecode():
+    with pytest.raises(ValueError) as e:
+        Level((3, 3), '...%%%.?@')
+    assert str(e.value) == "invalid tilecode '?' on (1, 2)"
