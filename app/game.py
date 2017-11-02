@@ -1,5 +1,6 @@
 from .level import Tile
 from .color import Color
+from .numtup import numtup
 
 class Direction():
     UP = 0
@@ -47,13 +48,20 @@ class Game():
         return _move(self.level, direction)
 
 def _move(level, dir_):
-    start = level.player
-    end = _pos_add(start, _to_pos(dir_))
+    shift = _to_pos(dir_)
+    start = numtup(level.player)
+    end = start + shift
     if level[end].tile == Tile.WALL:
         return Move(Move.ILLEGAL, start, end)
     elif level[end].tile == Tile.FLOOR:
         level.player = end
         return Move(Move.WALK, start, end)
+    elif level[end].tile == Tile.BOX:
+        pastend = end + shift
+        level[end].tile = Tile.FLOOR
+        level[pastend].tile = Tile.BOX
+        level.player = end
+        return Move(Move.PUSH, start, end)
 
 def _pos_add(lhs, rhs):
     return (lhs[0] + rhs[0], lhs[1] + rhs[1])
