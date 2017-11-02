@@ -1,5 +1,5 @@
 class Tile():
-    SPACE = 0
+    FLOOR = 0
     WALL = 1
     BOX = 2
 
@@ -52,9 +52,9 @@ class Level(object):
 
         def to_tile(index, code):
             code2tile = {
-                ' ': Tile.SPACE,
-                '.': Tile.SPACE,
-                '@': Tile.SPACE,
+                ' ': Tile.FLOOR,
+                '.': Tile.FLOOR,
+                '@': Tile.FLOOR,
                 '%': Tile.WALL,
                 'o': Tile.BOX,
             }
@@ -81,7 +81,7 @@ class Level(object):
     @player.setter
     def player(self, pos):
         tile = self[pos].tile
-        if tile != Tile.SPACE:
+        if tile != Tile.FLOOR:
             raise ValueError("expected player on floor")
         self._player = pos
 

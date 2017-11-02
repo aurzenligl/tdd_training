@@ -1,7 +1,7 @@
 import pytest
 from app.level import Tile, Level
 
-S = Tile.SPACE
+F = Tile.FLOOR
 W = Tile.WALL
 B = Tile.BOX
 
@@ -13,11 +13,11 @@ def test_level_filled():
     level = make_example_level()
 
     assert level.size == (3, 2)
-    assert level[0,0].tile == S
+    assert level[0,0].tile == F
     assert level[0,0].goal is False
     assert level[1,0].tile == W
     assert level[1,0].goal is False
-    assert level[2,1].tile == S
+    assert level[2,1].tile == F
     assert level[2,1].goal is True
 
 def test_level_indexing():
@@ -47,7 +47,7 @@ def test_level_player_position():
 def test_level_player_position_setting():
     level = make_example_level()
 
-    level.player = (0, 0)  # other space
+    level.player = (0, 0)  # other floor
     assert level.player == (0, 0)
 
     level.player = (2, 1)  # goal
@@ -73,7 +73,7 @@ def test_level_error_two_players():
         Level((3, 3), '....@...@')
     assert str(e.value) == "multiple players: '@' specified"
 
-def test_level_error_setting_player_not_on_space():
+def test_level_error_setting_player_not_on_floor():
     with pytest.raises(ValueError) as e:
         level = Level((2, 1), '@%')
         level.player = (1, 0)

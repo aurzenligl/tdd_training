@@ -30,7 +30,7 @@ class Game():
     def on_render(self, drawer):
         """Draws all game objects"""
         tile_to_color = {
-            Tile.SPACE: Color.LBLUE,
+            Tile.FLOOR: Color.LBLUE,
             Tile.WALL: Color.RED,
             Tile.BOX: Color.BROWN,
         }
@@ -51,7 +51,7 @@ def _move(level, dir_):
     end = _pos_add(start, _to_pos(dir_))
     if level[end].tile == Tile.WALL:
         return Move(Move.ILLEGAL, start, end)
-    elif level[end].tile == Tile.SPACE:
+    elif level[end].tile == Tile.FLOOR:
         level.player = end
         return Move(Move.WALK, start, end)
 
