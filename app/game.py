@@ -7,8 +7,15 @@ class Direction():
     RIGHT = 2
     LEFT = 3
 
-class MoveError(Exception):
-    pass
+class Move():
+    ILLEGAL = 0
+    WALK = 1
+    PUSH = 2
+
+    def __init__(self, type_, start=None, end=None):
+        self.type = type_
+        self.start = start
+        self.end = end
 
 class Game():
     """Game logic, knows how to move and what to render"""
@@ -28,11 +35,13 @@ class Game():
 
     def on_move(self, direction):
         """Reacts to movement"""
-        _move(self.level, direction)
+        return _move(self.level, direction)
 
 def _move(level, dir_):
-    if level[_pos_add(level.player, _to_pos(dir_))] == Tile.WALL:
-        raise MoveError("moving into a wall")
+    start = level.player
+    end = _pos_add(start, _to_pos(dir_))
+    if level[end] == Tile.WALL:
+        return Move(Move.ILLEGAL, start, end)
 
 def _pos_add(lhs, rhs):
     return (lhs[0] + rhs[0], lhs[1] + rhs[1])
