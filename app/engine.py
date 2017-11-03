@@ -12,8 +12,8 @@ class Engine():
     def run(self):
         """Initializes screen and runs game main loop."""
         pygame.init()
-        cols, rows = self.game.size()
-        self.screen = pygame.display.set_mode((cols * 20, rows * 20))
+        size = numtup(self.game.size())
+        self.screen = pygame.display.set_mode(size * Drawer.GRID)
         self._render()
 
         while True:
@@ -43,22 +43,25 @@ class Engine():
             self._render()
 
 class Drawer():
+    GRID = 20
+
     def __init__(self, screen):
         self.screen = screen
 
     def square(self, pos, color):
-        topleft = tuple(numtup(pos) * 20)
-        pygame.draw.rect(self.screen, color, topleft + (20, 20))
+        topleft = tuple(numtup(pos) * self.GRID)
+        pygame.draw.rect(self.screen, color, topleft + (self.GRID, self.GRID))
 
     def circle(self, pos, color):
-        center = tuple(numtup(pos) * 20 + 10)
-        pygame.draw.circle(self.screen, color, center, 8)
+        center = tuple(numtup(pos) * self.GRID + int(self.GRID * 0.5))
+        pygame.draw.circle(self.screen, color, center, int(self.GRID * 0.4))
 
     def diamond(self, pos, color):
-        center = numtup(pos) * 20 + 10
+        center = numtup(pos) * self.GRID + int(self.GRID * 0.5)
+        edgepos = int(self.GRID * 0.45)
         pygame.draw.aalines(self.screen, numtup(color) * 0.5, True, [
-            center + (9, 0),
-            center + (0, 9),
-            center + (-9, 0),
-            center + (0, -9),
+            center + (edgepos, 0),
+            center + (0, edgepos),
+            center + (-edgepos, 0),
+            center + (0, -edgepos),
         ])
