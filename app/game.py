@@ -45,26 +45,24 @@ class Game():
 
     def on_move(self, direction):
         """Reacts to movement"""
-        return _move(self.level, direction)
-
-def _move(level, dir_):
-    shift = _to_pos(dir_)
-    start = numtup(level.player)
-    end = start + shift
-    if level[end].tile == Tile.WALL:
-        return Move(Move.ILLEGAL, start, end)
-    elif level[end].tile == Tile.FLOOR:
-        level.player = end
-        return Move(Move.WALK, start, end)
-    elif level[end].tile == Tile.BOX:
-        pastend = end + shift
-        if level[pastend].tile == Tile.FLOOR:
-            level[end].tile = Tile.FLOOR
-            level[pastend].tile = Tile.BOX
-            level.player = end
-            return Move(Move.PUSH, start, end)
-        else:
+        level = self.level
+        shift = _to_pos(direction)
+        start = numtup(level.player)
+        end = start + shift
+        if level[end].tile == Tile.WALL:
             return Move(Move.ILLEGAL, start, end)
+        elif level[end].tile == Tile.FLOOR:
+            level.player = end
+            return Move(Move.WALK, start, end)
+        elif level[end].tile == Tile.BOX:
+            pastend = end + shift
+            if level[pastend].tile == Tile.FLOOR:
+                level[end].tile = Tile.FLOOR
+                level[pastend].tile = Tile.BOX
+                level.player = end
+                return Move(Move.PUSH, start, end)
+            else:
+                return Move(Move.ILLEGAL, start, end)
 
 def _to_pos(dir_):
     dirtopos = {
