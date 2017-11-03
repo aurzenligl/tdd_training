@@ -58,13 +58,13 @@ def _move(level, dir_):
         return Move(Move.WALK, start, end)
     elif level[end].tile == Tile.BOX:
         pastend = end + shift
-        level[end].tile = Tile.FLOOR
-        level[pastend].tile = Tile.BOX
-        level.player = end
-        return Move(Move.PUSH, start, end)
-
-def _pos_add(lhs, rhs):
-    return (lhs[0] + rhs[0], lhs[1] + rhs[1])
+        if level[pastend].tile == Tile.FLOOR:
+            level[end].tile = Tile.FLOOR
+            level[pastend].tile = Tile.BOX
+            level.player = end
+            return Move(Move.PUSH, start, end)
+        else:
+            return Move(Move.ILLEGAL, start, end)
 
 def _to_pos(dir_):
     dirtopos = {
@@ -73,4 +73,4 @@ def _to_pos(dir_):
         Direction.UP: (0, -1),
         Direction.DOWN: (0, 1),
     }
-    return dirtopos[dir_]
+    return numtup(dirtopos[dir_])
