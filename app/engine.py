@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 import pygame
 from .color import Color
 from .game import Direction
@@ -8,12 +9,12 @@ class Engine():
 
     def __init__(self, game):
         self.game = game
+        self.drawer = None
 
     def run(self):
         """Initializes screen and runs game main loop."""
         pygame.init()
-        size = numtup(self.game.size())
-        self.screen = pygame.display.set_mode(size * Drawer.GRID)
+        self.drawer = Drawer(self.game.size())
         self._render()
 
         while True:
@@ -25,9 +26,8 @@ class Engine():
 
     def _render(self):
         """Renders new game frame"""
-        self.screen.fill(Color.BLACK)
-        self.game.on_render(Drawer(self.screen))
-        pygame.display.flip()
+        with self.drawer.redraw():
+            self.game.on_render(self.drawer)
 
     def _keypress(self, key):
         """Reacts on any key press"""
@@ -45,8 +45,14 @@ class Engine():
 class Drawer():
     GRID = 20
 
-    def __init__(self, screen):
-        self.screen = screen
+    def __init__(self, size):
+        self.screen = pygame.display.set_mode(numtup(size) * Drawer.GRID)
+
+    @contextmanager
+    def redraw(self):
+        self.screen.fill(Color.BLACK)
+        yield
+        pygame.display.flip()
 
     def square(self, pos, color):
         topleft = tuple(numtup(pos) * self.GRID)
