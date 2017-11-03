@@ -9,6 +9,13 @@ def make_example_level():
     return Level((3, 2), ' %o'
                          '@o.')
 
+def test_tile_repr():
+    assert repr(Tile(Tile.FLOOR)) == '<Tile(f)>'
+    assert repr(Tile(Tile.WALL)) == '<Tile(w)>'
+    assert repr(Tile(Tile.BOX)) == '<Tile(b)>'
+    assert repr(Tile(Tile.FLOOR, goal=True)) == '<Tile(F)>'
+    assert repr(Tile(Tile.BOX, goal=True)) == '<Tile(B)>'
+
 def test_level_filled():
     level = make_example_level()
 
@@ -52,6 +59,14 @@ def test_level_player_position_setting():
 
     level.player = (2, 1)  # goal
     assert level.player == (2, 1)
+
+def test_level_str():
+    level = make_example_level()
+
+    assert str(level) == (
+        'fwb\n'
+        'fbF\n'
+    )
 
 def test_level_error_too_few_squaretypes():
     with pytest.raises(ValueError) as e:

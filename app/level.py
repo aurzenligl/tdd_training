@@ -7,6 +7,21 @@ class Tile():
         self.tile = tile
         self.goal = goal
 
+    @property
+    def reprcode(self):
+        codes = {
+            self.FLOOR: 'f',
+            self.WALL: 'w',
+            self.BOX: 'b',
+        }
+        code = codes[self.tile]
+        if self.goal:
+            code = code.upper()
+        return code
+
+    def __repr__(self):
+        return '<Tile(%s)>' % self.reprcode
+
 class LevelIterator():
     def __init__(self, level):
         self.level = level
@@ -99,6 +114,10 @@ class Level(object):
         Sequence consists of rows output left to right, top to bottom.
         """
         return LevelIterator(self)
+
+    def __str__(self):
+        cols, rows = self.size
+        return '\n'.join(''.join(self[c,r].reprcode for c in range(cols)) for r in range(rows)) + '\n'
 
 def _out_of_bounds(pos, bounds):
     return any(pos[i] >= bounds[i] for i in range(len(bounds)))
