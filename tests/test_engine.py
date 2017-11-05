@@ -70,7 +70,8 @@ def test_screen_renders_square(pygscr):
 
     drawer.square((4,2), Color.RED)
 
-    pygame.draw.rect.assert_called_once_with(pygscr, mock.ANY, (80, 40, 20, 20))
+    pygame.draw.rect.assert_any_call(pygscr, mock.ANY, (80, 40, 20, 20))
+    pygame.draw.rect.assert_any_call(pygscr, mock.ANY, (80, 40, 20, 20), 1)
 
 def test_screen_renders_circle(pygscr):
     drawer = Drawer(pygscr)

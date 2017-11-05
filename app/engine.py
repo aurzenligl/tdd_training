@@ -46,7 +46,10 @@ class Drawer():
 
     def square(self, pos, color):
         topleft = tuple(numtup(pos) * Screen.GRID)
-        pygame.draw.rect(self.surf, color, topleft + (Screen.GRID, Screen.GRID))
+        rect = topleft + (Screen.GRID, Screen.GRID)
+        pygame.draw.rect(self.surf, color, rect)
+        darkcolor = numtup(color) * 0.95
+        pygame.draw.rect(self.surf, darkcolor, rect, 1)
 
     def circle(self, pos, color):
         center = tuple(numtup(pos) * Screen.GRID + int(Screen.GRID * 0.5))
