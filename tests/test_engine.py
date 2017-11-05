@@ -3,8 +3,7 @@ import inspect
 import pytest
 import pygame
 from types import ModuleType
-from app.engine import Engine
-from app.game import Direction
+from app.engine import Engine, Screen, Drawer
 from app.color import Color
 
 @pytest.fixture(autouse=True)
@@ -39,58 +38,83 @@ def events():
     return eq
 
 @pytest.fixture
-def screen():
+def pygscr():
     scr = mock.Mock()
     screens = [scr]
     pygame.display.set_mode.side_effect = lambda _: screens.pop(0)
     return scr
 
-@pytest.fixture
-def game():
-    class GameFake():
-        def __init__(self):
-            self.on_move = mock.Mock()
-        def size(self):
-            return 5, 3
-        def on_render(self, drawer):
-            drawer.square((0,0), Color.RED)
-            drawer.square((4,2), Color.RED)
-            drawer.circle((1,1), Color.YELLOW)
-            drawer.diamond((2,2), Color.BLUE)
-
-    return GameFake()
-
-def test_engine_init(game, events):
-    events.push(pygame.QUIT)
-    eng = Engine(game)
-
-    eng.run()
+def test_engine_init(events):
+    eng = Engine()
 
     pygame.init.assert_called_once()
+
+def test_engine_screen_init():
+    eng = Engine()
+
+    scr = eng.screen((5, 3))
+
     pygame.display.set_mode.assert_called_once_with((100, 60))
 
-def test_engine_renders(game, events, screen):
-    events.push(pygame.QUIT)
-    eng = Engine(game)
+def test_engine_redraw(pygscr):
+    screen = Screen(geometry=(10, 10))
+    
+    with screen.draw() as drawer:
+        drawer.square((0,0), Color.RED)
 
-    eng.run()
-
-    screen.fill.assert_called_once()
-    pygame.draw.rect.assert_any_call(screen, mock.ANY, (0, 0, 20, 20))
-    pygame.draw.rect.assert_any_call(screen, mock.ANY, (80, 40, 20, 20))
-    pygame.draw.circle.assert_any_call(screen, mock.ANY, mock.ANY, mock.ANY)
-    pygame.draw.aalines.assert_any_call(screen, mock.ANY, mock.ANY, mock.ANY)
+    pygscr.fill.assert_called_once()
     pygame.display.flip.assert_called_once()
 
-def test_engine_relays_move_keypresses(game, events):
-    events.push(pygame.KEYDOWN, key=pygame.K_LEFT)
-    events.push(pygame.KEYDOWN, key=pygame.K_k)
-    events.push(pygame.KEYDOWN, key=pygame.K_UP)
-    events.push(pygame.QUIT)
-    eng = Engine(game)
+def test_screen_renders_square(pygscr):
+    drawer = Drawer(pygscr)
 
+    drawer.square((4,2), Color.RED)
+
+    pygame.draw.rect.assert_called_once_with(pygscr, mock.ANY, (80, 40, 20, 20))
+
+def test_screen_renders_circle(pygscr):
+    drawer = Drawer(pygscr)
+
+    drawer.circle((1,1), Color.YELLOW)
+
+    pygame.draw.circle.assert_called_once_with(pygscr, mock.ANY, (30, 30), mock.ANY)
+
+def test_screen_renders_diamond(pygscr):
+    drawer = Drawer(pygscr)
+
+    drawer.diamond((2,2), Color.BLUE)
+
+    pygame.draw.aalines.assert_called_once_with(pygscr, mock.ANY, mock.ANY, mock.ANY)
+
+def test_engine_stops_on_quit(events):
+    eng = Engine()
+
+    events.push(pygame.QUIT)
     eng.run()
 
-    assert game.on_move.call_count == 2
-    game.on_move.assert_any_call(Direction.LEFT)
-    game.on_move.assert_any_call(Direction.UP)
+def test_engine_ignores_unconnected_keydown(events):
+    eng = Engine()
+
+    events.push(pygame.KEYDOWN, key=pygame.K_RIGHT)
+    events.push(pygame.QUIT)
+    eng.run()
+
+def test_engine_calls_keydown_actions(events):
+    action = mock.MagicMock()
+    eng = Engine()
+    eng.connect_keydown(pygame.K_LEFT, action)
+
+    events.push(pygame.KEYDOWN, key=pygame.K_LEFT)
+    events.push(pygame.QUIT)
+    eng.run()
+
+    action.assert_called_once_with()
+
+def test_engine_stops_on_action_returning_false(events):
+    def action():
+        return False
+    eng = Engine()
+    eng.connect_keydown(pygame.K_ESCAPE, action)
+
+    events.push(pygame.KEYDOWN, key=pygame.K_ESCAPE)
+    eng.run()

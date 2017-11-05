@@ -4,8 +4,8 @@ from .game import Game
 from .hardcoded_level import get_level
 
 def main(argv=[]):
-    game = Game(get_level())
-    engine = Engine(game)
+    engine = Engine()
+    game = Game(engine, get_level())
     engine.run()
 
 if __name__ == '__main__':

@@ -1,7 +1,19 @@
 import mock
 import pytest
+import pygame
 from app.level import Level, Tile
-from app.game import Game, Direction, Move
+from app.game import Game
+from app import game
+
+@pytest.fixture
+def engine():
+    eng = mock.Mock()
+    eng.screen_mock = scr = mock.Mock()
+    eng.drawer_mock = drawctx = mock.MagicMock()
+    drawctx.__enter__.return_value = drawctx
+    scr.draw.return_value = drawctx
+    eng.screen.return_value = scr
+    return eng
 
 @pytest.fixture
 def level():
@@ -13,16 +25,44 @@ def level():
 def call_args(mock):
     return [x[:] for x in mock.call_args_list]
 
-def test_game_size(level):
-    game = Game(level)
+def test_game_screen_setup(engine, level):
+    game = Game(engine, level)
 
-    assert game.size() == (5, 4)
+    engine.screen.assert_called_once_with(geometry=(5,4))
+    engine.screen_mock.draw.assert_called_once_with()
+
+def test_game_keydown_actions_setup(engine, level):
+    game = Game(engine, level)
+
+    engine.connect_keydown.assert_any_call(pygame.K_DOWN, mock.ANY)
+    engine.connect_keydown.assert_any_call(pygame.K_UP, mock.ANY)
+    engine.connect_keydown.assert_any_call(pygame.K_RIGHT, mock.ANY)
+    engine.connect_keydown.assert_any_call(pygame.K_LEFT, mock.ANY)
+    engine.connect_keydown.assert_any_call(pygame.K_ESCAPE, mock.ANY)
+
+def test_game_move_on_action(engine, level):
+    actions = {}
+    engine.connect_keydown.side_effect = lambda key, action: actions.__setitem__(key, action)
+    game = Game(engine, level)
+
+    assert level.player == (1,1) 
+
+    actions[pygame.K_UP]()
+    assert level.player == (1,1)
+
+    actions[pygame.K_LEFT]()
+    assert level.player == (1,1)
+
+    actions[pygame.K_DOWN]()
+    assert level.player == (1,2)
+
+    actions[pygame.K_RIGHT]()
+    assert level.player == (2,2)
 
 def test_game_rendering(level):
-    game = Game(level)
     drawer = mock.Mock()
 
-    game.on_render(drawer)
+    game.render(drawer, level)
 
     for n in range(5):
         for m in range(4):
@@ -31,86 +71,70 @@ def test_game_rendering(level):
     drawer.diamond.assert_any_call((2,2), mock.ANY)
     drawer.diamond.assert_any_call((3,2), mock.ANY)
 
-@pytest.mark.parametrize("movement, endpos", [
-    (Direction.UP, (1, 0)),
-    (Direction.DOWN, (1, 2)),
-    (Direction.LEFT, (0, 1)),
-    (Direction.RIGHT, (2, 1))
+@pytest.mark.parametrize("shift", [
+    ((0, -1)),
+    ((0, 1)),
+    ((-1, 0)),
+    ((1, 0))
 ])
-def test_game_movement_illegal(level, movement, endpos):
+def test_game_movement_illegal(shift):
     level = Level((3,3), '%%%'
                          '%@%'
                          '%%%')
-    game = Game(level)
 
-    move = game.on_move(movement)
+    move = game.move(level, shift)
 
-    assert move.type == Move.ILLEGAL
-    assert move.start == (1, 1)
-    assert move.end == endpos
     assert level.player == (1, 1)
 
-@pytest.mark.parametrize("movement, endpos", [
-    (Direction.UP, (1, 0)),
-    (Direction.DOWN, (1, 2)),
-    (Direction.LEFT, (0, 1)),
-    (Direction.RIGHT, (2, 1))
+@pytest.mark.parametrize("shift, endpos", [
+    ((0, -1), (1, 0)),
+    ((0, 1), (1, 2)),
+    ((-1, 0), (0, 1)),
+    ((1, 0), (2,1))
 ])
-def test_game_movement_walk(level, movement, endpos):
+def test_game_movement_walk(shift, endpos):
     level = Level((3,3), '% %'
-                         '.@.'
+                         ' @ '
                          '% %')
-    game = Game(level)
 
-    move = game.on_move(movement)
+    move = game.move(level, shift)
 
-    assert move.type == Move.WALK
-    assert move.start == (1, 1)
-    assert move.end == endpos
     assert level.player == endpos
 
-@pytest.mark.parametrize("movement, endpos, endboxpos", [
-    (Direction.UP, (2, 1), (2, 0)),
-    (Direction.DOWN, (2, 3), (2, 4)),
-    (Direction.LEFT, (1, 2), (0, 2)),
-    (Direction.RIGHT, (3, 2), (4, 2))
+@pytest.mark.parametrize("shift, endpos, endboxpos", [
+    ((0, -1), (2, 1), (2, 0)),
+    ((0, 1), (2, 3), (2, 4)),
+    ((-1, 0), (1, 2), (0, 2)),
+    ((1, 0), (3, 2), (4, 2))
 ])
-def test_game_movement_push(level, movement, endpos, endboxpos):
+def test_game_movement_push(shift, endpos, endboxpos):
     level = Level((5,5), '%%.%%'
                          '%%o%%'
                          ' o@o '
                          '%%o%%'
                          '%%.%%')
-    game = Game(level)
 
-    move = game.on_move(movement)
+    move = game.move(level, shift)
 
-    assert move.type == Move.PUSH
-    assert move.start == (2, 2)
-    assert move.end == endpos
     assert level.player == endpos
     assert level[endpos].tile == Tile.FLOOR
     assert level[endboxpos].tile == Tile.BOX
 
-@pytest.mark.parametrize("movement, endpos, pastendpos, pastendtile", [
-    (Direction.UP, (2, 1), (2, 0), Tile.WALL),
-    (Direction.DOWN, (2, 3), (2, 4), Tile.WALL),
-    (Direction.LEFT, (1, 2), (0, 2), Tile.BOX),
-    (Direction.RIGHT, (3, 2), (4, 2), Tile.BOX)
+@pytest.mark.parametrize("shift, endpos, pastendpos, pastendtile", [
+    ((0, -1), (2, 1), (2, 0), Tile.WALL),
+    ((0, 1), (2, 3), (2, 4), Tile.WALL),
+    ((-1, 0), (1, 2), (0, 2), Tile.BOX),
+    ((1, 0), (3, 2), (4, 2), Tile.BOX)
 ])
-def test_game_movement_illegal_push(level, movement, endpos, pastendpos, pastendtile):
+def test_game_movement_illegal_push(shift, endpos, pastendpos, pastendtile):
     level = Level((5,5), '%%%%%'
                          '%%o%%'
                          'oo@oo'
                          '%%o%%'
                          '%%%%%')
-    game = Game(level)
 
-    move = game.on_move(movement)
+    move = game.move(level, shift)
 
-    assert move.type == Move.ILLEGAL
-    assert move.start == (2, 2)
-    assert move.end == endpos
     assert level.player == (2, 2)
     assert level[endpos].tile == Tile.BOX
     assert level[pastendpos].tile == pastendtile

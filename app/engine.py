@@ -1,71 +1,61 @@
 from contextlib import contextmanager
 import pygame
 from .color import Color
-from .game import Direction
 from .numtup import numtup
 
 class Engine():
-    """Manages game resources"""
+    """Provides game platform: graphics and user input"""
 
-    def __init__(self, game):
-        self.game = game
-        self.drawer = None
+    def __init__(self):
+        self.keydown_actions = {}
+        pygame.init()
+
+    def screen(self, geometry):
+        return Screen(geometry)
+
+    def connect_keydown(self, key, action):
+        self.keydown_actions[key] = action
 
     def run(self):
-        """Initializes screen and runs game main loop."""
-        pygame.init()
-        self.drawer = Drawer(self.game.size())
-        self._render()
-
+        """Runs game main loop."""
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return
                 if event.type == pygame.KEYDOWN:
-                    self._keypress(event.key)
+                    action = self.keydown_actions.get(event.key)
+                    if action is not None:
+                        if action() is False:
+                            return
 
-    def _render(self):
-        """Renders new game frame"""
-        with self.drawer.redraw():
-            self.game.on_render(self.drawer)
-
-    def _keypress(self, key):
-        """Reacts on any key press"""
-        directions = {
-            pygame.K_UP: Direction.UP,
-            pygame.K_DOWN: Direction.DOWN,
-            pygame.K_RIGHT: Direction.RIGHT,
-            pygame.K_LEFT: Direction.LEFT
-        }
-        direction = directions.get(key)
-        if direction is not None:
-            self.game.on_move(direction)
-            self._render()
-
-class Drawer():
+class Screen():
     GRID = 20
 
-    def __init__(self, size):
-        self.screen = pygame.display.set_mode(numtup(size) * Drawer.GRID)
+    def __init__(self, geometry):
+        self.surf = pygame.display.set_mode(numtup(geometry) * self.GRID)
 
     @contextmanager
-    def redraw(self):
-        self.screen.fill(Color.BLACK)
-        yield
+    def draw(self):
+        self.surf.fill(Color.BLACK)
+        yield Drawer(self.surf)
         pygame.display.flip()
 
+class Drawer():
+    def __init__(self, surf):
+        self.surf = surf
+
     def square(self, pos, color):
-        topleft = tuple(numtup(pos) * self.GRID)
-        pygame.draw.rect(self.screen, color, topleft + (self.GRID, self.GRID))
+        topleft = tuple(numtup(pos) * Screen.GRID)
+        pygame.draw.rect(self.surf, color, topleft + (Screen.GRID, Screen.GRID))
 
     def circle(self, pos, color):
-        center = tuple(numtup(pos) * self.GRID + int(self.GRID * 0.5))
-        pygame.draw.circle(self.screen, color, center, int(self.GRID * 0.4))
+        center = tuple(numtup(pos) * Screen.GRID + int(Screen.GRID * 0.5))
+        pygame.draw.circle(self.surf, color, center, int(Screen.GRID * 0.4))
 
     def diamond(self, pos, color):
-        center = numtup(pos) * self.GRID + int(self.GRID * 0.5)
-        edgepos = int(self.GRID * 0.45)
-        pygame.draw.aalines(self.screen, numtup(color) * 0.5, True, [
+        center = numtup(pos) * Screen.GRID + int(Screen.GRID * 0.5)
+        edgepos = int(Screen.GRID * 0.45)
+        pygame.draw.aalines(self.surf, numtup(color) * 0.5, True, [
             center + (edgepos, 0),
             center + (0, edgepos),
             center + (-edgepos, 0),
