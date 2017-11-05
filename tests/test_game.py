@@ -59,6 +59,13 @@ def test_game_move_on_action(engine, level):
     actions[pygame.K_RIGHT]()
     assert level.player == (2,2)
 
+def test_game_escape_action_stops(engine, level):
+    actions = {}
+    engine.connect_keydown.side_effect = lambda key, action: actions.__setitem__(key, action)
+    game = Game(engine, level)
+
+    assert actions[pygame.K_ESCAPE]() is False
+
 def test_game_rendering(level):
     drawer = mock.Mock()
 
