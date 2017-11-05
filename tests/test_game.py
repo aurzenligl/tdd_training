@@ -117,8 +117,8 @@ def test_game_movement_push(shift, endpos, endboxpos):
     move = game.move(level, shift)
 
     assert level.player == endpos
-    assert level[endpos].tile == Tile.FLOOR
-    assert level[endboxpos].tile == Tile.BOX
+    assert level[endpos].kind == Tile.FLOOR
+    assert level[endboxpos].kind == Tile.BOX
 
 @pytest.mark.parametrize("shift, endpos, pastendpos, pastendtile", [
     ((0, -1), (2, 1), (2, 0), Tile.WALL),
@@ -136,5 +136,5 @@ def test_game_movement_illegal_push(shift, endpos, pastendpos, pastendtile):
     move = game.move(level, shift)
 
     assert level.player == (2, 2)
-    assert level[endpos].tile == Tile.BOX
-    assert level[pastendpos].tile == pastendtile
+    assert level[endpos].kind == Tile.BOX
+    assert level[pastendpos].kind == pastendtile

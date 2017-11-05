@@ -39,7 +39,7 @@ def render(drawer, level):
     }
 
     for pos, tile in level:
-        color_ = tile_to_color[tile.tile]
+        color_ = tile_to_color[tile.kind]
         drawer.square(pos, color_)
         if tile.goal:
             drawer.diamond(pos, color_)
@@ -49,9 +49,9 @@ def move(level, shift):
     start = numtup(level.player)
     end = start + shift
     pastend = end + shift
-    if level[end].tile == Tile.FLOOR:
+    if level[end].kind == Tile.FLOOR:
         level.player = end
-    elif level[end].tile == Tile.BOX and level[pastend].tile == Tile.FLOOR:
-        level[end].tile = Tile.FLOOR
-        level[pastend].tile = Tile.BOX
+    elif level[end].kind == Tile.BOX and level[pastend].kind == Tile.FLOOR:
+        level[end].kind = Tile.FLOOR
+        level[pastend].kind = Tile.BOX
         level.player = end

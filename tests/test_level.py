@@ -20,19 +20,19 @@ def test_level_filled():
     level = make_example_level()
 
     assert level.size == (3, 2)
-    assert level[0,0].tile == F
+    assert level[0,0].kind == F
     assert level[0,0].goal is False
-    assert level[1,0].tile == W
+    assert level[1,0].kind == W
     assert level[1,0].goal is False
-    assert level[2,1].tile == F
+    assert level[2,1].kind == F
     assert level[2,1].goal is True
 
 def test_level_indexing():
     level = make_example_level()
 
-    level[1,0].tile = B
+    level[1,0].kind = B
 
-    assert level[1,0].tile == B
+    assert level[1,0].kind == B
 
 def test_level_iteration():
     level = make_example_level()

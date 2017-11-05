@@ -3,8 +3,8 @@ class Tile():
     WALL = 1
     BOX = 2
 
-    def __init__(self, tile, goal=False):
-        self.tile = tile
+    def __init__(self, kind, goal=False):
+        self.kind = kind
         self.goal = goal
 
     @property
@@ -14,7 +14,7 @@ class Tile():
             self.WALL: 'w',
             self.BOX: 'b',
         }
-        code = codes[self.tile]
+        code = codes[self.kind]
         if self.goal:
             code = code.upper()
         return code
@@ -95,8 +95,8 @@ class Level(object):
 
     @player.setter
     def player(self, pos):
-        tile = self[pos].tile
-        if tile != Tile.FLOOR:
+        kind = self[pos].kind
+        if kind != Tile.FLOOR:
             raise ValueError("expected player on floor")
         self._player = pos
 
