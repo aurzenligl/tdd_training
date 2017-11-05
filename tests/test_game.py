@@ -145,3 +145,18 @@ def test_game_movement_illegal_push(shift, endpos, pastendpos, pastendtile):
     assert level.player == (2, 2)
     assert level[endpos].kind == Tile.BOX
     assert level[pastendpos].kind == pastendtile
+
+def test_game_checking_winning_condition():
+    level = Level((3,1), 'OO@')
+
+    assert game.check_win(level) is True
+
+@pytest.mark.parametrize("codes", [
+    ('Oo@'),
+    ('O.@'),
+    ('o.@'),
+])
+def test_game_checking_win_when_goal_is_unsatisfied(codes):
+    level = Level((3,1), codes)
+
+    assert game.check_win(level) is False

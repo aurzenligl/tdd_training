@@ -55,3 +55,11 @@ def move(level, shift):
         level[end].kind = Tile.FLOOR
         level[pastend].kind = Tile.BOX
         level.player = end
+
+def check_win(level):
+    for pos, tile in level:
+        isbox = tile.kind == Tile.BOX
+        isgoal = tile.goal
+        if isbox != isgoal:
+            return False
+    return True
