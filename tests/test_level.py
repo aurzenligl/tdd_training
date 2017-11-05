@@ -1,10 +1,6 @@
 import pytest
 from app.level import Tile, Level
 
-F = Tile.FLOOR
-W = Tile.WALL
-B = Tile.BOX
-
 def make_example_level():
     return Level((3, 2), ' %o'
                          '@o.')
@@ -20,19 +16,25 @@ def test_level_filled():
     level = make_example_level()
 
     assert level.size == (3, 2)
-    assert level[0,0].kind == F
+    assert level[0,0].kind == Tile.FLOOR
     assert level[0,0].goal is False
-    assert level[1,0].kind == W
+    assert level[1,0].kind == Tile.WALL
     assert level[1,0].goal is False
-    assert level[2,1].kind == F
+    assert level[2,1].kind == Tile.FLOOR
     assert level[2,1].goal is True
+
+def test_level_code_box_on_goal():
+    level = Level((2, 1), 'O@')
+
+    assert level[0,0].kind == Tile.BOX
+    assert level[0,0].goal is True
 
 def test_level_indexing():
     level = make_example_level()
 
-    level[1,0].kind = B
+    level[1,0].kind = Tile.BOX
 
-    assert level[1,0].kind == B
+    assert level[1,0].kind == Tile.BOX
 
 def test_level_iteration():
     level = make_example_level()

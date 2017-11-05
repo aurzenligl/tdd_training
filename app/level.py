@@ -72,12 +72,13 @@ class Level(object):
                 '@': Tile.FLOOR,
                 '%': Tile.WALL,
                 'o': Tile.BOX,
+                'O': Tile.BOX,
             }
             tile = code2tile.get(code)
             if tile is None:
                 pos = tuple(reversed(divmod(index, size[0])))
                 raise ValueError("invalid tilecode '%s' on %s" % (code, pos))
-            goal = code == '.'
+            goal = code in ('.O')
             return Tile(tile, goal)
 
         self._size = size
