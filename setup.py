@@ -7,7 +7,7 @@ setup(
     install_requires = ['pygame'],
     entry_points = {
         'console_scripts': [
-            'app = app:main'
+            'app = app.__main__:main'
         ],
     },
 )

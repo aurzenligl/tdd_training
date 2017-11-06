@@ -4,7 +4,9 @@ import pytest
 import pygame
 from types import ModuleType
 from app.engine import Engine, Screen, Drawer
-from app.color import Color
+from app.numtup import numtup
+
+test_color = (1, 2, 3)
 
 @pytest.fixture(autouse=True)
 def mock_pygame(mocker):
@@ -60,7 +62,7 @@ def test_engine_redraw(pygscr):
     screen = Screen(geometry=(10, 10))
     
     with screen.draw() as drawer:
-        drawer.square((0,0), Color.RED)
+        drawer.square((0,0), test_color)
 
     pygscr.fill.assert_called_once()
     pygame.display.flip.assert_called_once()
@@ -68,24 +70,24 @@ def test_engine_redraw(pygscr):
 def test_screen_renders_square(pygscr):
     drawer = Drawer(pygscr)
 
-    drawer.square((4,2), Color.RED)
+    drawer.square((4,2), test_color)
 
-    pygame.draw.rect.assert_any_call(pygscr, mock.ANY, (80, 40, 20, 20))
-    pygame.draw.rect.assert_any_call(pygscr, mock.ANY, (80, 40, 20, 20), 1)
+    pygame.draw.rect.assert_any_call(pygscr, test_color, (80, 40, 20, 20))
+    pygame.draw.rect.assert_any_call(pygscr, numtup(test_color) * 0.95, (80, 40, 20, 20), 1)
 
 def test_screen_renders_circle(pygscr):
     drawer = Drawer(pygscr)
 
-    drawer.circle((1,1), Color.YELLOW)
+    drawer.circle((1,1), test_color)
 
-    pygame.draw.circle.assert_called_once_with(pygscr, mock.ANY, (30, 30), mock.ANY)
+    pygame.draw.circle.assert_called_once_with(pygscr, test_color, (30, 30), mock.ANY)
 
 def test_screen_renders_diamond(pygscr):
     drawer = Drawer(pygscr)
 
-    drawer.diamond((2,2), Color.BLUE)
+    drawer.diamond((2,2), test_color)
 
-    pygame.draw.aalines.assert_called_once_with(pygscr, mock.ANY, mock.ANY, mock.ANY)
+    pygame.draw.aalines.assert_called_once_with(pygscr, numtup(test_color) * 0.5, mock.ANY, mock.ANY)
 
 def test_engine_stops_on_quit(events):
     eng = Engine()
