@@ -11,7 +11,7 @@ class Game():
         self.screen = engine.screen(geometry=level.size)
         self.level = level
 
-        engine.connect_keydown(pygame.K_DOWN, lambda: self.on_move((0, 1)))
+        engine.connect_keydown(pygame.K_DOWN, lambda: self.on_move((0, -1)))
         engine.connect_keydown(pygame.K_UP, lambda: self.on_move((0, 1)))
         engine.connect_keydown(pygame.K_RIGHT, lambda: self.on_move((1, 0)))
         engine.connect_keydown(pygame.K_LEFT, lambda: self.on_move((-1, 0)))
