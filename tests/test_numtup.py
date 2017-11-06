@@ -1,5 +1,5 @@
 import pytest
-from app.numtup import numtup
+from sokoban.numtup import numtup
 
 @pytest.mark.parametrize('expr,res', [
     (numtup((1, 2)) + 3, (4, 5)),

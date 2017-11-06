@@ -2,9 +2,9 @@ import mock
 import pytest
 import pygame
 import time
-from app.level import Level, Tile
-from app.game import Game
-from app import game
+from sokoban.level import Level, Tile
+from sokoban.game import Game
+from sokoban import game
 
 @pytest.fixture(autouse=True)
 def mock_time(mocker):

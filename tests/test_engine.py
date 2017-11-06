@@ -3,8 +3,8 @@ import inspect
 import pytest
 import pygame
 from types import ModuleType
-from app.engine import Engine, Screen, Drawer
-from app.numtup import numtup
+from sokoban.engine import Engine, Screen, Drawer
+from sokoban.numtup import numtup
 
 test_color = (1, 2, 3)
 

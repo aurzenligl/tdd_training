@@ -1,5 +1,5 @@
 import pytest
-from app.level import Tile, Level
+from sokoban.level import Tile, Level
 
 def make_example_level():
     return Level((3, 2), ' %o'
