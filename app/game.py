@@ -52,8 +52,7 @@ def render(drawer, level, invert):
 
 def animate_goals(renderer):
     for i in range(10):
-        invert = i % 2
-        renderer(invert)
+        renderer(i)
         time.sleep(0.050)
 
 def move(level, shift):
