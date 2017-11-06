@@ -8,7 +8,7 @@ from app import game
 
 @pytest.fixture(autouse=True)
 def mock_time(mocker):
-    mocker.patch('time.sleep')
+    mocker.patch('time.sleep', autospec=True)
 
 @pytest.fixture
 def engine():
