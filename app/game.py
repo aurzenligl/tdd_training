@@ -1,7 +1,8 @@
+import time
+import pygame
 from .level import Tile
 from .color import Color
 from .numtup import numtup
-import pygame
 
 class Game():
     """Game logic, knows how to move and what to render"""
@@ -21,29 +22,39 @@ class Game():
         """Attempts to make a move"""
         move(self.level, shift)
         self._render()
+        if check_win(self.level):
+            animate_goals(self._render)
+            return False
 
     def on_escape(self):
         """Notifies engine to stop"""
         return False
 
-    def _render(self):
+    def _render(self, invert=False):
         """Draws all game objects"""
         with self.screen.draw() as drawer:
-            render(drawer, self.level)
+            render(drawer, self.level, invert)
 
-def render(drawer, level):
+def render(drawer, level, invert):
     tile_to_color = {
         Tile.FLOOR: Color.LBLUE,
         Tile.WALL: Color.RED,
         Tile.BOX: Color.BROWN,
     }
-
     for pos, tile in level:
         color_ = tile_to_color[tile.kind]
+        if invert and tile.goal:
+            color_ = color_[1], color_[0], color_[2]
         drawer.square(pos, color_)
         if tile.goal:
             drawer.diamond(pos, color_)
     drawer.circle(level.player, Color.YELLOW)
+
+def animate_goals(renderer):
+    for i in range(10):
+        invert = i % 2
+        renderer(invert)
+        time.sleep(0.050)
 
 def move(level, shift):
     start = numtup(level.player)
