@@ -22,9 +22,8 @@ def engine():
 
 @pytest.fixture
 def level():
-    return Level((5,4), '%%%%%'
-                        '%@o %'
-                        '% ..%'
+    return Level((5,3), '%%%%%'
+                        '%@o.%'
                         '%%%%%')
 
 def call_args(mock):
@@ -33,7 +32,7 @@ def call_args(mock):
 def test_game_screen_setup(engine, level):
     game = Game(engine, level)
 
-    engine.screen.assert_called_once_with(geometry=(5,4))
+    engine.screen.assert_called_once_with(geometry=(5,3))
     engine.screen_mock.draw.assert_called_once_with()
 
 def test_game_keydown_actions_setup(engine, level):
@@ -59,10 +58,10 @@ def test_game_move_on_action(engine, level):
     assert level.player == (1,1)
 
     actions[pygame.K_DOWN]()
-    assert level.player == (1,2)
+    assert level.player == (1,1)
 
     actions[pygame.K_RIGHT]()
-    assert level.player == (2,2)
+    assert level.player == (2,1)
 
 def test_game_move_ends_game(engine, level):
     level = Level((3,1), '@o.')
@@ -83,11 +82,10 @@ def test_game_rendering(level):
     game.render(drawer, level, invert=False)
 
     for n in range(5):
-        for m in range(4):
+        for m in range(3):
             drawer.square.assert_any_call((n,m), mock.ANY)
     drawer.circle.assert_any_call((1,1), mock.ANY)
-    drawer.diamond.assert_any_call((2,2), mock.ANY)
-    drawer.diamond.assert_any_call((3,2), mock.ANY)
+    drawer.diamond.assert_any_call((3,1), mock.ANY)
 
 def test_game_rendering_inverted(level):
     squares = {}
@@ -100,8 +98,8 @@ def test_game_rendering_inverted(level):
     game.render(drawer, level, invert=True)
 
     wall = squares[0, 0]
-    floor = squares[1, 2]
-    goal = squares[2, 2]
+    floor = squares[1, 1]
+    goal = squares[3, 1]
     assert wall[0] == wall[1]
     assert floor[0] == floor[1]
     assert goal[0] != goal[1]
