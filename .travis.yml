@@ -1,5 +1,11 @@
 language: python
+
 sudo: false
+
+os:
+  - linux
+  - osx
+
 matrix:
   include:
     - python: '2.7'
@@ -8,17 +14,22 @@ matrix:
       env: TOXENV=py36
     - python: '3.6'
       env: TOXENV=cov
+
 before_install:
   - python --version
   - uname -a
   - lsb_release -a
+
 install:
   - pip install tox
   - virtualenv --version
   - pip --version
   - tox --version
+
 script:
   - tox -v
+
 cache: pip
+
 notifications:
   email: false
