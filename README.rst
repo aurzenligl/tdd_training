@@ -13,3 +13,7 @@ You can test project with chosen interpreter by running pytest from virtualenv::
 
     $ . init-tox-env
     $ pytest
+
+You can run game from virtualenv too::
+
+    $ sokoban
