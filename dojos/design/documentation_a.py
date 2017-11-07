@@ -1,8 +1,6 @@
 # example based on code from Py library:
 # https://github.com/pytest-dev/py/blob/master/py/_path/local.py
 
-'Is this documentation style helpful?'
-
 class LocalPath(object):
     """ Class derived from object.
     """
@@ -33,6 +31,8 @@ class LocalPath(object):
         Calculates hash from string.
         """
         return hash(self.strpath)
+
+
 
 
 

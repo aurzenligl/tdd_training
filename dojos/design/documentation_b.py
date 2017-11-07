@@ -2,8 +2,6 @@
 # https://github.com/numpy/numpy/blob/master/numpy/matlib.py
 # https://github.com/numpy/numpy/blob/master/numpy/fft/fftpack.c
 
-'How should these functions be documented?'
-
 def ones(shape, dtype=None, order='C'):
     # ...
 
@@ -12,6 +10,8 @@ const Treal wa1[], const Treal wa2[])
 {
     // ...
 }
+
+
 
 
 
