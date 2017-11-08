@@ -13,15 +13,6 @@ matrix:
     - os: linux
       python: '3.6'
       env: TOXENV=cov
-    - os: osx
-      python: '2.7'
-      env: TOXENV=py27
-    - os: osx
-      python: '3.6'
-      env: TOXENV=py36
-    - os: osx
-      python: '3.6'
-      env: TOXENV=cov
 
 before_install:
   - python --version
