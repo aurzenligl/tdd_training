@@ -1,4 +1,4 @@
-# code example from lxml project:
+# code example based on lxml project:
 # https://github.com/lxml/lxml/blob/master/src/lxml/_elementpath.py
 
 def prepareStar(following, tag):
