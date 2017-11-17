@@ -26,8 +26,8 @@ class Reader(object):
         self.files = files
     def getContent(self):
         return ''.join(f.read() for f in self.files)
-    def fetchContent(self):
-        return reduce(sum, (f.readlines() for f in fs), [])
+    def takeContent(self):
+        return ''.join(line for f in files for line in f.readlines() if 'content' in line)
 
 class FlowersAndTreesManager(object): pass
 
@@ -86,8 +86,8 @@ class Reader(object):
         self.files = files
     def getContent(self):
         return ''.join(f.read() for f in self.files)
-    def fetchContent(self):
-        return reduce(sum, (f.readlines() for f in fs), [])
+    def takeContent(self):
+        return ''.join(line for f in files for line in f.readlines() if 'content' in line)
 
 '''Class probably has two responsibilities'''
 class FlowersAndTreesManager(object): pass
