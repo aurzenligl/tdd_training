@@ -1,5 +1,5 @@
 import pytest
-from impl import count_occurences
+from occurences import count_occurences
 
 '''
 Let's start by defining simple tests for simple scenarios.
@@ -62,10 +62,17 @@ def test_occurences_iterable_input():
 
 '''
 Negative tests can and should be written to specify behavior in
-case of unexpected input and keep that behavior consistent.
+case of wrong input and keep that behavior consistent.
 In this case we're expecting exception in case of mutable element.
 No specific exception, no emtpy dict return either, just exactly "some" exception.
 '''
 def test_occurences_disallows_mutable():
     with pytest.raises(Exception) as e:
         count_occurences([[]])
+
+'''
+You may have a feeling that some tests here are a case of overengineering.
+You're probably right. There's no right answer to question: how much tests
+should I write. You should gain some level of confidence in your code
+quality that you and your users are comfortable with.
+'''
