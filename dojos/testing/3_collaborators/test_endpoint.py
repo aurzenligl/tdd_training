@@ -4,6 +4,17 @@ from endpoint import Endpoint, EndpointError
 import ipc
 
 '''
+We're supposed to sever connection of Endpoint to concrete implementation
+of ipc module. Mock framework and monkeypatch feature would be most
+useful here. Still, we have multiple choices for all functions in ipc:
+    - stub
+    - fake
+    - mock
+    - friend
+Which one shall we use?
+'''
+
+'''
 Stub - allows to ignore real implementation.
 Use when it does not matter for caller what side-effects took place.
 '''
@@ -41,6 +52,17 @@ def ipc_receive_fake(monkeypatch):
     queue = ReceiveQueue()
     monkeypatch.setattr(ipc, 'receive', queue.pop)
     yield queue
+
+'''
+Friend - separating real implementation may not may any sense whatsoever
+in most occasions. Don't go overboard with mocking out all calls to other
+classes and functions, when you happen to test a class. You're not mocking
+out stdlib any time you use it, don't you?
+
+ipc.encode and ipc.decode are such innocuous functions - they're pure
+functions, processing input and returning output. Nothing wrong in using
+them as they are. Mocking them would be a lot of unnecessary, counterproductive work.
+'''
 
 class TestEndpoint(object):
 

@@ -16,15 +16,12 @@ class Endpoint(object):
         ipc.register(id_)
 
     def send(self, target, payload):
-        sender, receiver = self.id, target
-        header = struct.pack('>HH', sender, receiver)
-        datagram = header + payload
+        datagram = ipc.encode(self.id, target, payload)
         result = ipc.send(datagram)
         if not result:
             raise EndpointError('message to id %s cannot be sent' % target)
 
     def receive(self):
         datagram = ipc.receive()
-        header, payload = datagram[:4], datagram[4:]
-        sender, _ = struct.unpack('>HH', header)
+        sender, _, payload = ipc.decode(datagram)
         return sender, payload
