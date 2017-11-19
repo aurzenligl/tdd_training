@@ -1,4 +1,3 @@
-import mock
 import pytest
 from endpoint import Endpoint, EndpointError
 import ipc
