@@ -22,13 +22,11 @@ def test_occurences(input, expected):
     assert count_occurences(input) == expected
 
 @pytest.mark.parametrize("input, expected", [
-    ((x for x in range(2)), {0: 1, 1: 1}),
     ((0, 1), {0: 1, 1: 1}),
     ([0, 1], {0: 1, 1: 1}),
     ({0: None, 1: None}, {0: 1, 1: 1}),
     ('foo', {'f': 1, 'o': 2})
 ], ids = [
-    'generator',
     'tuple',
     'list',
     'dict',
@@ -36,6 +34,14 @@ def test_occurences(input, expected):
 ])
 def test_occurences_iterable_input(input, expected):
     assert count_occurences(input) == expected
+
+'''
+Parametrizing won't work well with generator expression object,
+as it exhausts during reading. If we executed test multiple times
+during single session, consecutive test runs would fails.
+'''
+def test_occurences_generator():
+    assert count_occurences((x for x in range(2))) == {0: 1, 1: 1}
 
 def test_occurences_heterogenous():
     x = 'abc'
