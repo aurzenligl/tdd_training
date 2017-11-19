@@ -9,8 +9,8 @@ class Digraph(object):
     def __init__(self):
         self.nodes = []
         self.edges = []
-        self.heads = {}
-        self.tails = {}
+        self._heads = {}
+        self._tails = {}
 
     def add_node(self, label):
         node = Node(self, label)
@@ -23,19 +23,19 @@ class Digraph(object):
         def append(mapping, key, value):
             values = mapping.setdefault(key, [])
             values.append(value)
-        append(self.heads, head, edge)
-        append(self.tails, tail, edge)
+        append(self._heads, head, edge)
+        append(self._tails, tail, edge)
         return edge
 
     def remove_node(self, node):
-        edges = self.heads[node] + self.tails[node]
+        edges = self._heads.get(node, []) + self._tails.get(node, [])
         map(self.remove_edge, edges)
         self.nodes.remove(node)
 
     def remove_edge(self, edge):
         self.edges.remove(edge)
-        self.heads[edge.head].remove(edge)
-        self.tails[edge.tail].remove(edge)
+        self._heads[edge.head].remove(edge)
+        self._tails[edge.tail].remove(edge)
 
     def node(self, label):
         return next(n for n in self.nodes if n.label == label)
@@ -54,7 +54,7 @@ class Node(object):
 
     @property
     def head_edges(self):
-        return self._graph.tails.get(self, [])
+        return self._graph._tails.get(self, [])
 
     @property
     def tail_nodes(self):
@@ -62,7 +62,7 @@ class Node(object):
 
     @property
     def tail_edges(self):
-        return self._graph.heads.get(self, [])
+        return self._graph._heads.get(self, [])
 
     def __repr__(self):
         return '<Node %s>' % self.label
