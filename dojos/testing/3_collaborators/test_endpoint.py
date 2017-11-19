@@ -22,6 +22,26 @@ def ipc_mock_send(mocker):
         return True
     ipc.send.side_effect = send_mock
 
+'''
+Fake - we provide implementation similar when it comes to behavior
+to the real thing, but so as to have full control over collaborator.
+We don't need to spy actions on interface boundary anymore, it's
+enough to store state in fake object and assert it at the end of test.
+'''
+@pytest.fixture(autouse=True)
+def ipc_receive_fake(monkeypatch):
+    class ReceiveQueue():
+        def __init__(self):
+            self.datagrams = []
+        def push(self, datagram):
+            self.datagrams.append(datagram)
+        def pop(self):
+            return self.datagrams.pop(0)
+
+    queue = ReceiveQueue()
+    monkeypatch.setattr(ipc, 'receive', queue.pop)
+    yield queue
+
 class TestEndpoint(object):
 
     '''
@@ -57,3 +77,18 @@ class TestEndpoint(object):
 
         ipc.send.assert_called_once_with('\x00\x01\x00\x02' + 'abcdef')
         assert str(e.value) == 'message to id 2 cannot be sent'
+
+    '''
+    We use fake differently. It doesn't have "spying" ability, but here
+    we don't need it. It might be easier and more clear to use queue
+    object as a means to provide messages to receive, instead of using
+    mock side_effect interface for this.
+    '''
+    def test_receive(self, ipc_receive_fake):
+        ipc_receive_fake.push('\x00\x01\x00\x02' + 'abcdef')
+        endpt = Endpoint(0x2)
+
+        sender, payload = endpt.receive()
+
+        assert sender == 1
+        assert payload == 'abcdef'
