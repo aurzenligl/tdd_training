@@ -115,6 +115,9 @@ class BrokenPasswordTestsExplained(object):
             assert num in pwd
 
     '''
+    Any change in gen_password implementation will change the
+    order of characters, even though seed is set. This is fragile.
+
     This test expects that gen_password uses "random" module.
     What if it doesn't? It could use random device or C extension
     module as source of randomness. Changing random seed in these
