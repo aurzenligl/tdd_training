@@ -45,7 +45,7 @@ class TestTree(object):
         stdout = Stdout()
 
         monkeypatch.setattr(sys, 'stdout', stdout)
-        tree(root)
+        tree(root, sizes=True)
         monkeypatch.undo()
 
         assert stdout.value ==(

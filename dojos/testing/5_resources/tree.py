@@ -1,6 +1,11 @@
 import os
 
-def tree(path, sizes=True):
+'''
+Let's see how we could test code using
+filesystem and stdout stream.
+'''
+
+def tree(path, sizes=False):
     def enum_last(list_):
         length = len(list_)
         islast = [False] * (length - 1) + [True] * bool(length)
