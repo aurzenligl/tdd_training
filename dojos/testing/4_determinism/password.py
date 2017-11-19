@@ -18,9 +18,12 @@ def gen_password(template):
                     letters, numbers and other characters respectively
 
     Example:
-        >>> gen_password('xxxxxx000.')
-        'aBjOqK829!'
-        #xxxxxx000.
+        >>> gen_password('xxx')
+        'jaK'
+        >>> gen_password('000')
+        '910'
+        >>> gen_password('xxxxxx000..')
+        'aBjOqK829!@'
     '''
 
     def make_bucket(code, charset):
