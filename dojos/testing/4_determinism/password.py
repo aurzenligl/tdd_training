@@ -20,6 +20,7 @@ def gen_password(template):
     Example:
         >>> gen_password('xxxxxx000.')
         'aBjOqK829!'
+        #xxxxxx000.
     '''
 
     def make_bucket(code, charset):
