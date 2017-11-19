@@ -2,6 +2,14 @@ import pytest
 from occurences import count_occurences
 
 '''
+Previous test had too much logic inside. It reimplemented function it
+was supposed to test. If such test fails, you never know whether implementation
+failed or test failed (was improperly written).
+
+This test(s) can and should be much simpler.
+'''
+
+'''
 Let's start by defining simple tests for simple scenarios.
 Key is to define multiple tests which check different aspects of tested entity.
 If they do all pass at the same time, we have a good reason to suspect that
