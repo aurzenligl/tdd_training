@@ -6,7 +6,7 @@ def ones(shape, dtype=None, order='C'):
     # ...
 
 static void radb3(int ido, int l1, const Treal cc[], Treal ch[],
-const Treal wa1[], const Treal wa2[])
+                  const Treal wa1[], const Treal wa2[])
 {
     // ...
 }
