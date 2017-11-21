@@ -12,20 +12,21 @@ class Circle(object):
 
 def sum_area(shapes):
     area = 0
-    if isinstance(shape, Square):
-        area += shape.side ** 2
-    else:
-        area += math.pi * (shape.radius ** 2)
+    for shape in shapes:
+        if isinstance(shape, Square):
+            area += shape.side ** 2
+        else:
+            area += math.pi * (shape.radius ** 2)
     return area
 
 def max_area(shapes):
     max_ = 0
     if isinstance(shape, Square):
-        area += shape.side ** 2
+        area = shape.side ** 2
         if area > max_:
             max_ = area
     else:
-        area += math.pi * (shape.radius ** 2)
+        area = math.pi * (shape.radius ** 2)
         if area > max_:
             max_ = area
     return area

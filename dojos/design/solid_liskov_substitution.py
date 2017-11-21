@@ -39,15 +39,22 @@ class Square(Rectangle):
         self._height = value
         self._width = value
 
-def foo(square):
-    square.width = 5
-    assert square.area == 25, 'type %s does not behave like square' % (type(square))
+def copy(lhs, rhs):
+    lhs.width = rhs.width
+    lhs.height = rhs.height
 
-foo(Square(2))
+rect1 = Square()
+rect2 = Rectangle(2,4)
+copy(rect1, rect2)
+assert rect2.area == 16
 try:
-    foo(Rectangle(4))
+    assert rect1.area == 16
 except Exception as e:
     print(type(e), str(e))
+
+
+
+
 
 
 

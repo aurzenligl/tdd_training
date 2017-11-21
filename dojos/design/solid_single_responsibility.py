@@ -74,7 +74,7 @@ def to_text(list_):
     return ''.join('%s\n' % item for item in list_)
 
 import sys
-sys.stdout.write(to_text(items))
+sys.stdout.write(to_text(take_even(items)))
 
 '''... as well as saving to file'''
 def save(path, content):
