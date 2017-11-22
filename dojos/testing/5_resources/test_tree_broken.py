@@ -51,12 +51,12 @@ class TestTree(object):
         assert stdout.value ==(
             'tmp_%s\n'
             '|-- bar [1000]\n'
+            '|-- baz [1]\n'
+            '|-- empty\n'
+            '|-- foo [10]\n'
             '|-- one\n'
             '|   |-- bar [4]\n'
             '|   `-- foo [3]\n'
-            '|-- two\n'
-            '|   `-- three\n'
-            '|       `-- data [1234]\n'
-            '|-- empty\n'
-            '|-- foo [10]\n'
-            '`-- baz [1]\n') % rootnum
+            '`-- two\n'
+            '    `-- three\n'
+            '        `-- data [1234]\n') % rootnum

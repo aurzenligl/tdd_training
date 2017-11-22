@@ -11,14 +11,14 @@ def tree(path, sizes=False):
         islast = [False] * (length - 1) + [True] * bool(length)
         return [e for e in zip(list_, islast)]
 
-    def printer(path, lasts):
+    def print_dir(dir_path, lasts):
         chunk_dir = '|   '
         chunk_dir_last = '    '
         chunk_file = '|-- '
         chunk_file_last = '`-- '
 
-        for name, last in enum_last(os.listdir(path)):
-            inner_path = os.path.join(path, name)
+        for name, last in enum_last(sorted(os.listdir(dir_path))):
+            inner_path = os.path.join(dir_path, name)
             isdir = os.path.isdir(inner_path)
 
             line = ''.join(chunk_dir_last if last else chunk_dir for last in lasts)
@@ -30,7 +30,8 @@ def tree(path, sizes=False):
             print(line)
 
             if isdir:
-                printer(inner_path, lasts + [last])
+                print_dir(inner_path, lasts + [last])
 
     print(path)
-    printer(path, [])
+    if os.path.isdir(path):
+        print_dir(path, [])
