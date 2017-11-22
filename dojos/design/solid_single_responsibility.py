@@ -47,21 +47,44 @@ class ItemManager(object):
 
 
 
+
+
+
+
+
+
+
+
+
+
 '''
 Class introduces a set of member variables which are accessible to all methods.
 In order not to break encapsulation, one should limit the amount of state (variables) to bare minimum,
 which is necessary, and use other classes to keep the rest of state.
 
-Sometimes a couple of free functions and built-in types is all that it takes...
+Use class when you have an "invariant", i.e. a kind of contract each method of class has,
+which demands object state to be kept consistent between method calls.
+https://en.wikipedia.org/wiki/Class_invariant
+
+Frequently such invariant does not exist and multiple loosely coupled data elements occupy
+one big class for no good reason whatsoever.
 '''
 
-'sort and append are list methods. No need to wrap them in useless methods'
-items = [1, 4, 9, 2]
-items.append(6)
-items.sort()
+'''
+Sometimes a couple of free functions and built-in types is all that it takes...
 
-'''use free functions when you can. They're easily tested, have no state,
-   they may process various data regardless of context and purpose'''
+Use free functions when you can. They're easily tested, possess no state,
+have minimal dependencies and may process various data regardless of context and purpose.
+As long, of course, as you don't use global variables to hide state in.
+'''
+
+import sys
+import struct
+
+'''
+Let's pick and name list-processing functions. They're useful as such.
+They don't have any dependency to filesystem, filenames, binary serialization and whatnot.
+'''
 def flatten(nested_list):
     return [item for list_ in nested_list for item in list_]
 
@@ -69,23 +92,38 @@ def take_even(list_):
     it = iter(list_)
     return [pair[1] for pair in zip(it, it)]
 
-'''extracting transformation to text allows to print...'''
+'''
+Let's take to-text and to-binary transformation functions out.
+They don't manage list elements, only transform them to other format.
+They don't need dependency to filesystem as well.
+'''
 def to_text(list_):
     return ''.join('%s\n' % item for item in list_)
 
-import sys
-sys.stdout.write(to_text(take_even(items)))
+def to_blob(list_):
+    return ''.join(struct.pack('>I', item) for item in list_)
 
-'''... as well as saving to file'''
+'''
+The only function which cares about writing to filesystem
+doesn't need to know how to manipulate lists and accepts
+already preprated content.
+'''
 def save(path, content):
     with open(path, 'w') as f:
         f.write(content)
 
-save('/tmp/items_text', to_text(items))
+'''
+Sort and append are list methods. No need to wrap them in useless methods,
+which contibute only to codebase complexity.
+'''
 
-'''if one needs to save as binary - there is a separate function for just that'''
-def to_blob(list_):
-    import struct
-    return ''.join(struct.pack('>I', item) for item in list_)
-
-save('/tmp/items_blob', to_blob(items))
+'''
+Any usage scenario which ItemManager user has had (be it function, script or other class)
+can be replaced with one-liner solutions, like the following:
+'''
+items = [1, 4, 9, 2]
+items.append(6)  # append is a buint-in class method
+items.sort()  # append is a buint-in class method
+sys.stdout.write(to_text(take_even(items)))  # combination of free functions solve printing problem
+save('/tmp/items_text', to_text(items))  # saving text to file is handled by combination of two functions
+save('/tmp/items_blob', to_blob(items))  # saving binary data to file requires different, aptly named function
