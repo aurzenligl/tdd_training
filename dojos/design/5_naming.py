@@ -6,6 +6,7 @@ logPathString = "/tmp/log.txt";
 logsPathString = "logs/subdir/output";
 
 b_fileRead = True
+
 class IBaseArray(object): pass
 
 work = 0
