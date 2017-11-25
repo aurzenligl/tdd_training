@@ -15,7 +15,7 @@ def rotate(nodes, index, known):
     return False
 
 def to_nodes(depvects):
-    return [Node(text_node[0], text_node[1:])  for text_node in depvects]
+    return [Node(depvec[0], depvec[1:])  for depvec in depvects]
 
 def to_depvects(nodes):
     return [[node.name] + node.dependencies for node in nodes]
