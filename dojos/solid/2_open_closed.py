@@ -21,15 +21,16 @@ def sum_area(shapes):
 
 def max_area(shapes):
     max_ = 0
-    if isinstance(shape, Square):
-        area = shape.side ** 2
-        if area > max_:
-            max_ = area
-    else:
-        area = math.pi * (shape.radius ** 2)
-        if area > max_:
-            max_ = area
-    return area
+    for shape in shapes:
+        if isinstance(shape, Square):
+            area = shape.side ** 2
+            if area > max_:
+                max_ = area
+        else:
+            area = math.pi * (shape.radius ** 2)
+            if area > max_:
+                max_ = area
+    return max_
 
 
 
