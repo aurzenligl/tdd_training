@@ -33,7 +33,7 @@ class TestTsort(object):
         ]
         assert tsort(input) == expected
 
-    def test_one_rotate(self):
+    def test_one_replace(self):
         input = [
             [b, a],
             [a],
@@ -44,7 +44,7 @@ class TestTsort(object):
         ]
         assert tsort(input) == expected
 
-    def test_two_rotates(self):
+    def test_two_replaces(self):
         input = [
             [b, a],
             [a],
@@ -57,7 +57,7 @@ class TestTsort(object):
         ]
         assert tsort(input) == expected
 
-    def test_nested_rotates(self):
+    def test_nested_replaces(self):
         input = [
             [c, b],
             [b, a],
@@ -70,7 +70,7 @@ class TestTsort(object):
         ]
         assert tsort(input) == expected
 
-    def test_multiple_dependencies_rotates(self):
+    def test_multiple_dependencies_replaces(self):
         input = [
             [c, a, b],
             [b],
@@ -83,7 +83,7 @@ class TestTsort(object):
         ]
         assert tsort(input) == expected
 
-    def test_multiple_dependencies_nested_rotates(self):
+    def test_multiple_dependencies_nested_replaces(self):
         input = [
             [c, b, a],
             [b, a],
