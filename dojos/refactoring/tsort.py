@@ -1,17 +1,21 @@
 def tsort(depvects):
-    known = set()
+    known = []
     index = 0
     while index < len(depvects):
         skip = False
         for dep in depvects[index][1:]:
             if dep not in known:
-                found = (candidate for candidate in depvects[index + 1:] if candidate[0] == dep).next()
-                found_index = depvects.index(found)
-                depvects.insert(index, depvects.pop(found_index))
+                for vec in depvects[index + 1:]:
+                    if vec[0] == dep:
+                        break
+                for i, dv in enumerate(depvects):
+                    if dv is vec:
+                        break
+                depvects.insert(index, depvects.pop(i))
                 skip = True
                 break
         if skip:
             continue
-        known.add(depvects[index][0])
+        known.append(depvects[index][0])
         index += 1
     return depvects
