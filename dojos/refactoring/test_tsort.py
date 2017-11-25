@@ -1,4 +1,3 @@
-import pytest
 from tsort import tsort
 
 a = 'a'
