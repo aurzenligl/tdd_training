@@ -14,17 +14,24 @@ def rotate(nodes, index, known):
     known.add(node.name)
     return False
 
-def to_nodes(depvects):
-    return [Node(depvec[0], depvec[1:])  for depvec in depvects]
-
-def to_depvects(nodes):
-    return [[node.name] + node.dependencies for node in nodes]
-
 def tsort(depvects):
-    nodes = to_nodes(depvects)
+    nodes = []
+    for depvec in depvects:
+        name = depvec[0]
+        deps = depvec[1:]
+        node = Node(name, deps)
+        nodes.append(node)
+
     known = set()
     index = 0
     while index < len(nodes):
         if not rotate(nodes, index, known):
             index += 1
-    return to_depvects(nodes)
+
+    out = []
+    for node in nodes:
+        depvect = []
+        depvect.append(node.name)
+        depvect.extend(node.dependencies)
+        out.append(depvect)
+    return out
