@@ -29,7 +29,8 @@ class Digraph(object):
 
     def remove_node(self, node):
         edges = self._heads.get(node, []) + self._tails.get(node, [])
-        map(self.remove_edge, edges)
+        for edge in edges:
+            self.remove_edge(edge)
         self.nodes.remove(node)
 
     def remove_edge(self, edge):

@@ -45,5 +45,5 @@ def gen_password(template):
     }
 
     def pick(c):
-        return code_to_buckets[c].next()
+        return next(code_to_buckets[c])
     return ''.join(pick(c) for c in template)

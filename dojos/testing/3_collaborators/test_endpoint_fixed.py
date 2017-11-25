@@ -80,9 +80,9 @@ class TestEndpoint(object):
     def test_send_success(self):
         endpt = Endpoint(0x1)
 
-        endpt.send(0x2, 'abcdef')
+        endpt.send(0x2, b'abcdef')
 
-        ipc.send.assert_called_once_with('\x00\x01\x00\x02' + 'abcdef')
+        ipc.send.assert_called_once_with(b'\x00\x01\x00\x02' + b'abcdef')
 
     '''
     In order to test failure case we need to change mock behavior.
@@ -94,9 +94,9 @@ class TestEndpoint(object):
         endpt = Endpoint(0x1)
 
         with pytest.raises(EndpointError) as e:
-            endpt.send(0x2, 'abcdef')
+            endpt.send(0x2, b'abcdef')
 
-        ipc.send.assert_called_once_with('\x00\x01\x00\x02' + 'abcdef')
+        ipc.send.assert_called_once_with(b'\x00\x01\x00\x02' + b'abcdef')
         assert str(e.value) == 'message to id 2 cannot be sent'
 
     '''
@@ -106,10 +106,10 @@ class TestEndpoint(object):
     mock side_effect interface for this.
     '''
     def test_receive(self, ipc_receive_fake):
-        ipc_receive_fake.push('\x00\x01\x00\x02' + 'abcdef')
+        ipc_receive_fake.push(b'\x00\x01\x00\x02' + b'abcdef')
         endpt = Endpoint(0x2)
 
         sender, payload = endpt.receive()
 
         assert sender == 1
-        assert payload == 'abcdef'
+        assert payload == b'abcdef'

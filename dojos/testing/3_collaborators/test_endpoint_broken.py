@@ -21,6 +21,6 @@ class TestEndpoint(object):
         ipc.send.side_effect = send_mock
         endpt = Endpoint(0x1)
 
-        endpt.send(0x2, 'abcdef')
+        endpt.send(0x2, b'abcdef')
 
-        ipc.encode.assert_called_once_with(0x1, 0x2, 'abcdef')
+        ipc.encode.assert_called_once_with(0x1, 0x2, b'abcdef')

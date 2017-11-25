@@ -1,5 +1,8 @@
+import sys
 import random
 from password import gen_password, PasswordConfig
+
+py2 = sys.version_info.major == 2
 
 class TestPassword(object):
     def test_randomness(self):
@@ -11,10 +14,10 @@ class TestPassword(object):
     def test_alphas(self):
         random.seed(0)
 
-        assert gen_password('xxxxxx') == 'RNvnAv'
+        assert gen_password('xxxxxx') == ('RNvnAv' if py2 else 'yWAcqG')
 
     def test_numbers(self):
-        assert gen_password('000000') == '734595'
+        assert gen_password('000000') == ('734595' if py2 else '764759')
 
     def test_alphas_without_capital(self):
         pwds = [gen_password('x') for _ in range(30)]
@@ -126,14 +129,14 @@ class BrokenPasswordTestsExplained(object):
     def test_alphas(self):
         random.seed(0)
 
-        assert gen_password('xxxxxx') == 'RNvnAv'
+        assert gen_password('xxxxxx') == ('RNvnAv' if py2 else 'yWAcqG')
 
     '''
     This test depends on previous one. If they're run multiple times
     or shuffled, it will fail constantly.
     '''
     def test_numbers(self):
-        assert gen_password('000000') == '734595'
+        assert gen_password('000000') == ('734595' if py2 else '764759')
 
     '''
     This test is sort of ok, but may fail. Probability is extremely low,
