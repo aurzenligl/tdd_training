@@ -12,9 +12,18 @@ class IBaseArray(object): pass
 work = 0
 jump = 2
 parse = 42
+
 flower = True
+
 termination = False
+
 findPath = 'foobarbaz'
+
+class Map(object): pass
+map = Map()
+def id():
+    return 4
+open = True
 
 class Date(object):
     def __init__(self, dd, mm, yyyy):
@@ -67,12 +76,30 @@ Different entities ought to follow different parts of speech.
 Verbs: methods, nouns: classes and non-class, non-function variables.
 Booleans names should be related to a yes/no question.
 '''
+'''These are verbs, probably not a good choice for int variable'''
 work = 0
 jump = 2
 parse = 42
+'''Flower roughly translates to yes/no.'''
 flower = True
+'''Termination could translate to yes/no.'''
 termination = False
+'''Sounds like a function or function object. It's not.'''
 findPath = 'foobarbaz'
+
+'''
+Be careful not to override Python's builtins or frequently used module names,
+like sys or os, or variable/function names already defined. This would
+"shadow" them, i.e. hide original definition providing new one instead.
+
+"id" is quite nasty, as this will work somewhat similar to id builtin.
+Now this is True: id('foo') == id(5)
+'''
+class Map(object): pass
+map = Map()
+def id(x):
+    return 4
+open = True
 
 '''Names should be pronouncible, easier to talk about code that way'''
 class Date(object):
