@@ -16,6 +16,12 @@ class Game():
         engine.connect_keydown(pygame.K_RIGHT, lambda: self.on_move((1, 0)))
         engine.connect_keydown(pygame.K_LEFT, lambda: self.on_move((-1, 0)))
         engine.connect_keydown(pygame.K_ESCAPE, self.on_escape)
+
+        engine.DOWN = lambda: [self.on_move((0, 1)), time.sleep(0.5)]
+        engine.UP = lambda: [self.on_move((0, -1)), time.sleep(0.5)]
+        engine.LEFT = lambda: [self.on_move((-1, 0)), time.sleep(0.5)]
+        engine.RIGHT = lambda: [self.on_move((1, 0)), time.sleep(0.5)]
+
         self._render()
 
     def on_move(self, shift):
@@ -24,7 +30,7 @@ class Game():
         self._render()
         if check_win(self.level):
             animate_goals(self._render)
-            return False
+            #return False
 
     def on_escape(self):
         """Notifies engine to stop"""
@@ -51,9 +57,10 @@ def render(drawer, level, invert):
     drawer.circle(level.player, Color.YELLOW)
 
 def animate_goals(renderer):
-    for i in range(10):
+    revert = True
+    for i in range(10):      
         renderer(i)
-        time.sleep(0.050)
+        time.sleep(0.05)
 
 def move(level, shift):
     start = numtup(level.player)

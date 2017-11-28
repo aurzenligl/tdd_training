@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 import pygame
+import time
 from .color import Color
 from .numtup import numtup
 
@@ -21,12 +22,25 @@ class Engine():
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return
+                    return    
                 if event.type == pygame.KEYDOWN:
                     action = self.keydown_actions.get(event.key)
                     if action is not None:
                         if action() is False:
                             return
+
+    def demo_solver(self):
+        list_of_actions = [self.DOWN] * 3 + [self.UP] * 2 + [self.LEFT] * 6 + [self.DOWN] * 4 + [self.RIGHT] * 4
+        for action in list_of_actions:
+            pygame.event.get()
+            action()
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return
+        
+
+                            
 
 class Screen():
     GRID = 20
