@@ -39,6 +39,7 @@ class Screen():
         self.surf.fill(Color.BLACK)
         yield Drawer(self.surf)
         pygame.display.flip()
+        pygame.event.get()
 
 class Drawer():
     def __init__(self, surf):
