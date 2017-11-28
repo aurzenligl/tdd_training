@@ -5,19 +5,18 @@ from .engine import Engine
 from .game import Game
 from .level import Level
 
-
 the_level = Level((20, 14),
     '                    '
     '           %%% %    '
     '     %%%%%%%   %%   '
-    '    %% % @%% oo %   '
-    '    %    o      %   '
-    '    %  o  %%%   %   '
+    '    %% % @%%    %   '
+    '    %           %   '
+    '    %     %%%   %   '
     '    %%% %%%%%o%%%   '
-    '    % o  %%% ..%    '
-    '    % o o o ...%    '
-    '    %    %%%...%    '
-    '    % oo % %...%    '
+    '    %    %%%   %    '
+    '    %      o   %    '
+    '    %    %%%   %    '
+    '    %    % % ..%    '
     '    %  %%% %%%%%    '
     '    % %%            '
     '                    '

@@ -29,8 +29,8 @@ class Game():
         move(self.level, shift)
         self._render()
         if check_win(self.level):
-            animate_goals(self._render)
-            #return False
+            animate_goals(self._render,10)
+            return False
 
     def on_escape(self):
         """Notifies engine to stop"""
@@ -47,20 +47,25 @@ def render(drawer, level, invert):
         Tile.WALL: Color.RED,
         Tile.BOX: Color.BROWN,
     }
+    
     for pos, tile in level:
         color_ = tile_to_color[tile.kind]
+        
         if invert and tile.goal:
             color_ = color_[1], color_[0], color_[2]
         drawer.square(pos, color_)
+        
         if tile.goal:
             drawer.diamond(pos, color_)
     drawer.circle(level.player, Color.YELLOW)
 
-def animate_goals(renderer):
-    revert = True
-    for i in range(10):      
-        renderer(i)
-        time.sleep(0.05)
+
+def animate_goals(renderer,freq):
+    flag = False
+    for i in range(freq):
+        renderer(invert = flag)
+        flag = not flag
+        time.sleep(0.250)
 
 def move(level, shift):
     start = numtup(level.player)
